@@ -10,5 +10,3 @@ Deadline: 2022/12/02 1200 (noon)
 
 - - - 
 use either `camelCase` or `snake_case` for variables name
-
-- - - 
