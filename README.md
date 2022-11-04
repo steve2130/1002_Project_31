@@ -11,4 +11,7 @@ Deadline: 2022/12/02 1200 (noon)
 Place your code in G31 folder  
 and use either `camelCase` or `snake_case` for variables name
 - - - 
-Don't delete any branch or I will hate you :-(
++ Personal Expense Tracker  
+    + Input/store/update/retrieve the income(s), spendings and other allocations -> Tommy  
+    + Display the total income of last year -> Lam  
+    + Display the top three spendings in the past 30 days -> Martin  
