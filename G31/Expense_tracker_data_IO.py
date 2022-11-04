@@ -9,39 +9,51 @@ def main():
     """
         This expense tracker 
     """
-    csv_creation()
+    csv_read()
 
 
 
 def csv_creation():
-    """
-
-    """
     default_row_items = ["Entry created time", "Income", "Category", "Amount", "User entered time"]
                         # Timestamp             boolean   string       float    timestamp/string?
-
-                        
-    while (path.isfile("data.csv")):
-        # if data.csv does not exist
-
+        
+    if (path.isfile("data.csv") != True):   # check if data.csv does not exist
+        
         with open("data.csv", "w") as data_csv:
             data_writer = csv.writer(data_csv)
             data_writer.writerow(default_row_items)     # write the columns of the csv with elements of {default_row_items}
 
 
 
-    # it should skip the while loop is data.csv exists
+
+
+def csv_read():
+
+    default_row_items = ["Entry created time", "Income", "Category", "Amount", "User entered time"]
+                        # Timestamp             boolean   string       float    timestamp/string?
     with open("data.csv") as data_csv:
-        data_reader = csv.DictReader(data_csv)
-        for i in range(1):
-            line.
+
+        if (csv_readSingleLine(data_csv, default_row_items)):
+            data_reader = csv.DictReader(data_csv)
+
+        else:
+            csv_creation()
     
     return data_reader
 
 
-def csv_readLine():
-    
 
+
+
+def csv_readSingleLine(data_csv, default_row_items):
+    for i in range(1, 2):
+        line = data_csv.readline()
+
+        if line == default_row_items:
+            return True
+
+        else:
+            return False
 
 
 
