@@ -97,3 +97,8 @@ def CSV_writeToFile(entry):
 def Time_UTCDateAndTime():
     """Return current UTC time in seconds"""
     return int(time.time())
+
+def Time_LocalDate():
+    """Return current local date"""
+    # https://stackoverflow.com/questions/32490629/getting-todays-date-in-yyyy-mm-dd-in-python
+    return str(datetime.today().strftime('%Y-%m-%d'))
