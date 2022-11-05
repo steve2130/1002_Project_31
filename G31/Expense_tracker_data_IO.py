@@ -3,59 +3,52 @@
 
 
 import csv      
-from os import path                   
+from os import path
+from datetime import datetime                   
 
-def main():
-    """
-        This expense tracker 
-    """
-    csv_read()
 
+
+
+def csv_checkFileExistence():
+    """Check if data.csv exist in the path of .py files"""
+    return path.isfile("data.csv")
+    
 
 
 def csv_creation():
-    default_row_items = ["Entry created time", "Income", "Category", "Amount", "User entered time"]
-                        # Timestamp             boolean   string       float    timestamp/string?
-        
-    if (path.isfile("data.csv") != True):   # check if data.csv does not exist
-        
-        with open("data.csv", "w") as data_csv:
-            data_writer = csv.writer(data_csv)
-            data_writer.writerow(default_row_items)     # write the columns of the csv with elements of {default_row_items}
+    """Create .csv file if there isn't one"""
+    default_row_items = csv_getDefaultRowItems()
+    
+    with open("data.csv", "w") as data_csv:
+        data_writer = csv.writer(data_csv)
+        data_writer.writerow(default_row_items)     # write the columns of the csv with elements of {default_row_items}
 
 
+
+def csv_getDefaultRowItems():
+    """Just to avoid creating var {Default_row_items} every time I want to use it"""
+    return ["Entry created time", "Income", "Category", "Amount", "User entered time"]
+            # Timestamp            boolean   string      float      timestamp/string?
 
 
 
 def csv_read():
 
-    default_row_items = ["Entry created time", "Income", "Category", "Amount", "User entered time"]
-                        # Timestamp             boolean   string       float    timestamp/string?
     with open("data.csv") as data_csv:
+        data_reader = csv.DictReader(data_csv)
+        row_data = csv_convertRowsToLists(data_reader)
+        print(row)
 
-        if (csv_readSingleLine(data_csv, default_row_items)):
-            data_reader = csv.DictReader(data_csv)
 
-        else:
-            csv_creation()
+
+def csv_convertRowsToLists(data_reader):
+    row_data = []
+    for row in data_reader:
+            row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Amount"]])
     
-    return data_reader
+    return row_data
 
 
 
 
 
-def csv_readSingleLine(data_csv, default_row_items):
-    for i in range(1, 2):
-        line = data_csv.readline()
-
-        if line == default_row_items:
-            return True
-
-        else:
-            return False
-
-
-
-if __name__ == "__main__":
-    main()
