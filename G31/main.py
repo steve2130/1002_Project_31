@@ -127,7 +127,7 @@ def Record():
         #####################################
         while(checkflag_income == False):       # loop if the user mis-input something like int or bool here
             
-            FunctionIndentLineBreakPrint("\033[3;33;40mIncome (I) or Expense (E)?\033[0;0m")
+            FunctionIndentLineBreakPrint("\033[3;33mIncome (I) or Expense (E)?\033[0;0m")
             # colored text baby
             # https://stackabuse.com/how-to-print-colored-text-in-python/
 
@@ -142,13 +142,13 @@ def Record():
                 income_boolean = False
 
             else:
-                FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
                 checkflag_income == False
 
 
         #####################################
         while(checkflag_category == False):
-            FunctionIndentLineBreakPrint("\033[3;33;40mWhich category does it belong? (e.g. Breakfast, Shopping, Salary)\033[0;0m")
+            FunctionIndentLineBreakPrint("\033[3;33mWhich category does it belong? (e.g. Breakfast, Shopping, Salary)\033[0;0m")
 
             category = input("\t>> ")
 
@@ -158,7 +158,7 @@ def Record():
                 checkflag_category = True
             
             else:
-                FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
                 checkflag_category = False
 
 
@@ -174,7 +174,7 @@ def Record():
             #     checkflag_category = True
 
             # else:
-            #     FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
+            #     FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
             #     checkflag_category = False
 
             # # This code will throw exception if a string exist in {category} and cannot be converted into float/int/bool/complex
@@ -189,7 +189,7 @@ def Record():
 
         #####################################
         while(checkflag_amount == False):
-            FunctionIndentLineBreakPrint("\033[3;33;40mHow much is that?\033[0;0m")
+            FunctionIndentLineBreakPrint("\033[3;33mHow much is that?\033[0;0m")
 
             try: 
                 amount = float(input("\t>> $"))
@@ -197,16 +197,16 @@ def Record():
                 checkflag_amount = True
             
             except:
-                FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
                 checkflag_amount = False
 
 
         #####################################
         # ***Not Working!!!***
         while(checkflag_date == False):
-            FunctionIndentLineBreakPrint("\033[3;33;40mWhen did it happen?\033[0;0m")
-            FunctionIndentPrint(" - \033[3;33;40mIf it happens today, type 'T' or 'Today'.\033[0;0m")
-            FunctionIndentPrint(" - \033[3;33;40mIf it happened in the past, type the date (YYYY-MM-DD) it happens.\033[0;0m")
+            FunctionIndentLineBreakPrint("\033[3;33mWhen did it happen?\033[0;0m")
+            FunctionIndentPrint(" - \033[3;33mIf it happens today, type 'T' or 'Today'.\033[0;0m")
+            FunctionIndentPrint(" - \033[3;33mIf it happened in the past, type the date (YYYY-MM-DD) it happens.\033[0;0m")
 
             date = str(input("\t>> "))
 
@@ -231,18 +231,18 @@ def Record():
                         checkflag_date = True
                     # ***Not Working!!!***       
                     else:
-                        FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
+                        FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
                         checkflag_date = False
 
                 except:
-                    FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
+                    FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
                     checkflag_date = False
                 
 
 
 
             else:
-                FunctionIndentPrint("\033[1;31;40m[🗙 ]\033[0;0m Invaild input. Please enter either 'T'/'Today', or a vaild date (YYYY-MM-DD).")
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T'/'Today', or a vaild date (YYYY-MM-DD).")
                 checkflag_date = False
 
 

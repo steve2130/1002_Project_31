@@ -80,7 +80,9 @@ def CSV_retreveEntireListOfEntries():
 
 
 def CSV_writeToFile(entry):
-    with open("data.csv", "w") as data_csv:
+    with open("data.csv", "a") as data_csv:
+        # "r" or "w" or "a"
+          # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
         data_writer = csv.DictWriter(data_csv)
 
 
