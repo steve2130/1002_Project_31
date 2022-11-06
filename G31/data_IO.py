@@ -8,10 +8,9 @@ from datetime import datetime                   # need the date
 import time                                     # Unix time epoch
 
 
-
 def CSV_getDefaultRowItems():
     """Just to avoid creating var {Default_row_items} every time I want to use it"""
-    return ["Entry created time", "Income", "Category", "Amount", "User entered time"]
+    return ["Entry created time", "Income", "Category", "Name", "Amount", "User entered time"]
             # Timestamp            boolean   string      float      timestamp/string?
 
 
@@ -27,6 +26,9 @@ def CSV_getDefaultRowItems():
             # Category:           String
             #                     Entered by user to describe their income / spending
             #                     e.g. salary, food, shopping, drinks, stock interest
+
+            # Name:               String 
+            #                     For user to name their income / spending
 
             # Amount              Float
             #                     Dollars
@@ -48,6 +50,7 @@ def CSV_checkFileExistence():
 
 def CSV_creation():
     """Create .csv file if there isn't one"""
+    # https://stackoverflow.com/questions/58992872/how-to-create-a-csv-file-in-python-script-if-it-doesnt-exist-in-the-directory
     default_row_items = CSV_getDefaultRowItems()
     
     with open("data.csv", "w") as data_csv:
@@ -65,11 +68,12 @@ def CSV_retreveEntireListOfEntries():
         Input: nothing
         Output: [[a row of data in data.csv], [another row of data in data.csv], ...] 
     """
-    #var
     row_data = []
 
+    # How to write or read csv
+    # https://blog.gtwang.org/programming/python-csv-file-reading-and-writing-tutorial/
     with open("data.csv") as data_csv:
-        data_reader = csv.DictReader(data_csv)
+        data_reader = csv.DictReader(data_csv, fieldnames=CSV_getDefaultRowItems())
 
         for row in data_reader:
                 row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Amount"], row["User entered time"]])
@@ -82,14 +86,13 @@ def CSV_retreveEntireListOfEntries():
 def CSV_writeToFile(entry):
     with open("data.csv", "a") as data_csv:
         # "r" or "w" or "a"
-          # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
-        data_writer = csv.DictWriter(data_csv)
+        # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
+        data_writer = csv.DictWriter(data_csv, fieldnames=CSV_getDefaultRowItems())
+        data_writer.writerow(entry)
 
+        # **Will bugged if another process (e.g. excel) is opening data.csv
 
-
-
-
-
+        # print("\n\t :( Something is wrong with writing to the data file.\n")
 
 
 

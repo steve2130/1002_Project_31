@@ -1,4 +1,10 @@
-# main.py
+# If you are using VS Code and you are debugging with breakpoints,
+# you might want to disable JustMyCode in launch.json
+# Otherwise csv.DictReader and csv.DictWriter so how what do not work.
+
+# https://stackoverflow.com/questions/52980448/how-to-disable-just-my-code-setting-in-vscode-debugger
+
+
 
 import data_IO as data_IO
 import re
@@ -27,18 +33,23 @@ def main():
 
 
 def Menu_selection(option):
-        if option == 1:
-            Record()
+    if (main_checkDataFileExistence() == True):
 
-        elif option == 2:
-            Update()
+            if option == 1:
+                Record()
 
-        elif option == 3:
-            View()
+            elif option == 2:
+                Update()
 
-        else:
-            EmojiPrint(":(", "Please check your entered option. It should be a number between 1 and 3.")
+            elif option == 3:
 
+                View()
+
+            else:
+                EmojiPrint(":(", "Please check your entered option. It should be a number between 1 and 3.")
+    
+    elif (main_checkDataFileExistence() == False):
+        return
 
 
 def Menu_printOptions():
@@ -90,176 +101,216 @@ def main_checkDataFileExistence():
                 data_IO.CSV_creation()
                 LineBreakPrint("Data file created!\n")
 
-                return False
+                return False   # So that it will return to the main menu after the file is created.
 
 
             elif option.upper() ==  "N" or option.upper() == "NO":
                 checkflag = True
                 print(" ")  # line break
-                return False
+                return False   # return to main menu
 
             else:
-                EmojiPrint(":(", " Please check you have entered. It should be a character of either Y or N.")
+                EmojiPrint(":(", " Please check the word you have entered. It should be a character of either Y or N.")
 
 
 
 
 
 def Record():
+    entry = Record_userInput()
+    data_IO.CSV_writeToFile(entry)
+    EmojiPrint(":)", "Recorded!")
+
+
+
+
+
+
+def Record_userInput():
     """
     Record user's inputs and store them in data.csv
 
     Input: refer to {CSV_getDefaultRowItems()} in Expense_tracker_data_IO.py 
     Output: nothing
     """
-    if(main_checkDataFileExistence() == True):
-        print(" ")
-        FunctionIndentPrint("🡫 🡫 🡫")
-        FunctionIndentLineBreakPrint("Record your income or spending here!")
 
-        # vars
-        checkflag_income = False
-        checkflag_category = False
-        checkflag_amount = False
-        checkflag_date = False
+    print(" ")
+    FunctionIndentPrint("🡫 🡫 🡫")
+    FunctionIndentLineBreakPrint("Record your income or spending here!")
 
-        # My brain hurts...
-        #####################################
-        while(checkflag_income == False):       # loop if the user mis-input something like int or bool here
-            
-            FunctionIndentLineBreakPrint("\033[3;33mIncome (I) or Expense (E)?\033[0;0m")
-            # colored text baby
-            # https://stackabuse.com/how-to-print-colored-text-in-python/
+    # vars
+    checkflag_income = False
+    checkflag_category = False
+    checkflag_name = False
+    checkflag_amount = False
+    checkflag_date = False
 
-            income = input("\t>> ")
 
-            if income.upper() == "I" or income.upper() == "INCOME":
-                checkflag_income = True
-                income_boolean = True
+    # My brain hurts...
+    #####################################
+    while(checkflag_income == False):       # loop if the user mis-input something like int or bool here
+        
+        FunctionIndentLineBreakPrint("\033[3;33mIncome (I) or Expense (E)?\033[0;0m")
+        # colored text baby
+        # https://stackabuse.com/how-to-print-colored-text-in-python/
+        # even worse than <span>...
 
-            elif income.upper() == "E" or income.upper() == "EXPENSE":
-                checkflag_income = True
-                income_boolean = False
+        income = input("\t>> ")
+
+        if income.upper() == "I" or income.upper() == "INCOME":
+            checkflag_income = True
+            income_boolean = True
+
+        elif income.upper() == "E" or income.upper() == "EXPENSE":
+            checkflag_income = True
+            income_boolean = False
+
+        else:
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
+            checkflag_income == False
+
+
+    #####################################
+    while(checkflag_category == False):
+        FunctionIndentLineBreakPrint("\033[3;33mWhich category does it belong? (e.g. \033[4;36mFood\033[0;0m\033[3;33m, \033[4;36mTraffic\033[0;0m\033[3;33m, \033[4;36mShopping\033[0;0m\033[3;33m)\033[0;0m")
+
+        category = input("\t>> ")
+
+        if (re.match("[a-zA-Z]", category)):                    # regex. Return true if it find a character in {category}. 
+                                                                # Return false if number is place before characters. like "6x crab", "7x beer"
+            category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
+            checkflag_category = True
+        
+        else:
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
+            checkflag_category = False
+
+
+
+
+        # try:
+        #     category = input("\t>> ")
+        #     category = complex(bool(int(float(category))))      # To give error if user entered int or float, hopefully user will not enter complex number
+        #                                                                                                       # looks like it treats it as string so everything is cool
+        # except:
+        # # if (type(category) != str):
+        #     category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
+        #     checkflag_category = True
+
+        # else:
+        #     FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
+        #     checkflag_category = False
+
+        # # This code will throw exception if a string exist in {category} and cannot be converted into float/int/bool/complex
+        # # Which is a good thing because we do need a string and not numbers
+        # # If the user actually typed a number (int/float), it will then processed with the code in "else:", as the number user entered cannot trigger an type error
+
+        # # Only string will trigger an error, which is what we want
+        # # Will 100% get blame if used in production code.
+
+
+
+
+
+    #####################################
+    while(checkflag_name == False):
+        FunctionIndentLineBreakPrint("\033[3;33mWould you like to give it a name?\033[0;0m")
+        FunctionIndentPrint(" - \033[3;33mFor example: (\033[4;36mFood\033[0;0m\033[3;33m - \033[4;32mKFC\033[0;0m\033[3;33m), (\033[4;36mTraffic\033[0;0m\033[3;33m - \033[4;32mbus[215X]\033[0;0m\033[3;33m), (\033[4;36mShopping\033[0;0m\033[3;33m - \033[4;32mSteam\033[0;0m\033[3;33m).\033[0;0m")
+        # CSS, the most hated thing in this entire earth, is still better than this crap
+        # even brainf*ck is better than this
+
+        try: 
+            name = str(input("\t>> "))
+            if (name == ""):                  # Check for empty string
+                name = category
+                checkflag_name = True
+                
+            elif (name.strip() != ""):        # Check for spaces only input: "    "
+                checkflag_name = True
 
             else:
-                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
-                checkflag_income == False
-
-
-        #####################################
-        while(checkflag_category == False):
-            FunctionIndentLineBreakPrint("\033[3;33mWhich category does it belong? (e.g. Breakfast, Shopping, Salary)\033[0;0m")
-
-            category = input("\t>> ")
-
-            if (re.match("[a-zA-Z]", category)):                      # regex. Return true if it find a character in {category}. 
-                                                                    # Return false if number is place before characters. like "6x crab", "7x beer"
-                category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
-                checkflag_category = True
-            
-            else:
-                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
-                checkflag_category = False
-
-
-
-
-            # try:
-            #     category = input("\t>> ")
-            #     category = complex(bool(int(float(category))))      # To give error if user entered int or float, hopefully user will not enter complex number
-            #                                                                                                       # looks like it treats it as string so everything is cool
-            # except:
-            # # if (type(category) != str):
-            #     category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
-            #     checkflag_category = True
-
-            # else:
-            #     FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
-            #     checkflag_category = False
-
-            # # This code will throw exception if a string exist in {category} and cannot be converted into float/int/bool/complex
-            # # Which is a good thing because we do need a string and not numbers
-            # # If the user actually typed a number (int/float), it will then processed with the code in "else:", as the number user entered cannot trigger an type error
-
-            # # Only string will trigger an error, which is what we want
-            # # Will 100% get blame if used in production code.
-
-
-
-
-        #####################################
-        while(checkflag_amount == False):
-            FunctionIndentLineBreakPrint("\033[3;33mHow much is that?\033[0;0m")
-
-            try: 
-                amount = float(input("\t>> $"))
-                amount = round(amount, 2)       # round the $ to 2 dec place -> 200.689 -> 200.69
-                checkflag_amount = True
-            
-            except:
                 FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
-                checkflag_amount = False
+                checkflag_name = False
+        
+        except:
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
+            checkflag_name = False
 
 
-        #####################################
+
+
+
+    #####################################
+    while(checkflag_amount == False):
+        FunctionIndentLineBreakPrint("\033[3;33mHow much is that?\033[0;0m")
+
+        try: 
+            amount = float(input("\t>> $"))
+            amount = round(amount, 2)       # round the $ to 2 dec place -> 200.689 -> 200.69
+            checkflag_amount = True
+        
+        except:
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
+            checkflag_amount = False
+
+
+
+
+
+    #####################################
+    # ***Not Working!!!***
+    while(checkflag_date == False):
+        FunctionIndentLineBreakPrint("\033[3;33mWhen did it happen?\033[0;0m")
+        FunctionIndentPrint(" - \033[3;33mIf it happens today, type 'T' or 'Today'.\033[0;0m")
+        FunctionIndentPrint(" - \033[3;33mIf it happened in the past, type the date (YYYY-MM-DD) it happens.\033[0;0m")
+
+        date = str(input("\t>> "))
+
+        if (date.upper() == "T" or date.upper() == "TODAY"):
+            date = data_IO.Time_LocalDate()     # Get today date
+            checkflag_date = True
+
+
         # ***Not Working!!!***
-        while(checkflag_date == False):
-            FunctionIndentLineBreakPrint("\033[3;33mWhen did it happen?\033[0;0m")
-            FunctionIndentPrint(" - \033[3;33mIf it happens today, type 'T' or 'Today'.\033[0;0m")
-            FunctionIndentPrint(" - \033[3;33mIf it happened in the past, type the date (YYYY-MM-DD) it happens.\033[0;0m")
+        elif (type(int(date[0])) == int):     
+        # ***Not Working!!!***    
+            try:
+                check_date = date.split("-")    # To find ans split "-" in 2022-11-05     -> Just to avoid someone mis-input the date like 2022/11/05
 
-            date = str(input("\t>> "))
-
-            if (date.upper() == "T" or date.upper() == "TODAY"):
-                date = data_IO.Time_LocalDate()     # Get today date
-                checkflag_date = True
-
-
-            # ***Not Working!!!***
-            elif (re.search("[-]", date)):     # To find "-" in 2022-11-05     -> Just to avoid someone mis-input the date like 2022/11/05
-            # ***Not Working!!!***    
-                try:
-                    check_date = date.split("-")
-
-                    check_date[0] = int(check_date[0])
-                    check_date[1] = int(check_date[1])
-                    check_date[2] = int(check_date[2])
-
-                    # ***Not Working!!!***
-                    if (len(check_date[0]) == 4 and len(check_date[1]) == 2 and len(check_date[2]) == 2 and check_date[1] <= 12 and check_date[2] <= 31):
-                        # check for length of YYYY, MM, DD and whether MM > 12 or DD > 31
-                        checkflag_date = True
-                    # ***Not Working!!!***       
-                    else:
-                        FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
-                        checkflag_date = False
-
-                except:
+                # ***Not Working!!!***
+                if (len(check_date[0]) == 4 and len(check_date[1]) == 2 and len(check_date[2]) == 2 and int(check_date[1]) < 13 and int(check_date[2]) < 32 and int(check_date[0]) > 1969 and int(check_date[1]) > 0 and int(check_date[2]) > 0):
+                    # check for length of YYYY, MM, DD and whether MM > 12 or DD > 31
+                    checkflag_date = True
+                # ***Not Working!!!***       
+                else:
                     FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
                     checkflag_date = False
-                
 
-
-
-            else:
-                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T'/'Today', or a vaild date (YYYY-MM-DD).")
+            except:
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
                 checkflag_date = False
+            
 
 
-        #####################################
-        entry = {
-            "Entry created time": data_IO.Time_UTCDateAndTime(),
-            "Income" : income_boolean,
-            "Category" : category,
-            "Amount" : amount,
-            "User entered time" : date
-        }
 
-        print(entry)
+        else:
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T'/'Today', or a vaild date (YYYY-MM-DD).")
+            checkflag_date = False
 
 
-    else:
-        return # return to main menu
+    #####################################
+    entry = {
+        "Entry created time": data_IO.Time_UTCDateAndTime(),
+        "Income" : income_boolean,
+        "Category" : category,
+        "Name" : name,
+        "Amount" : amount,
+        "User entered time" : date
+    }
+
+    return entry
+
+
 
     
 
@@ -271,14 +322,10 @@ def Update():
 
 
 def View():
-    if(main_checkDataFileExistence() == True):
         row_data = data_IO.CSV_retreveEntireListOfEntries()
-
+        print(row_data)
         # Your current balance
         
-    else:
-        return  # return to main menu
-
 
 
 
