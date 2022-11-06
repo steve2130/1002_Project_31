@@ -1,6 +1,6 @@
 # main.py
 
-import Expense_tracker_data_IO as data_IO
+import data_IO as data_IO
 import re
 
 def main():
