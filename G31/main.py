@@ -122,7 +122,7 @@ def Record_userInput():
     """
     Record user's inputs and store them in data.csv
 
-    Input: refer to {CSV_getDefaultRowItems()} in Expense_tracker_data_IO.py 
+    Input: refer to {CSV_getDefaultRowItems()} in csv_IO.py 
     Output: nothing
     """
 
