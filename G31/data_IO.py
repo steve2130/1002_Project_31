@@ -76,7 +76,7 @@ def CSV_retreveEntireListOfEntries():
         data_reader = csv.DictReader(data_csv, fieldnames=CSV_getDefaultRowItems())
 
         for row in data_reader:
-                row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Amount"], row["User entered time"]])
+                row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Name"], row["Amount"], row["User entered time"]])
         
         return row_data
 

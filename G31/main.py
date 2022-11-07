@@ -328,17 +328,22 @@ def Update():
     row_data = data_IO.CSV_retreveEntireListOfEntries()
     row_data.reverse()                      # To get the latest entries first
     for i in range(len(row_data)):
-        row_data[i][0] = row_data[i][4]     # replace timestamp with {User entered time}
-        del row_data[i][4]                  # delete {User entered time}
+        row_data[i][0] = row_data[i][5]     # replace timestamp with {User entered time}
+        del row_data[i][5]                  # delete {User entered time}
+        print(row_data[i])
     
+    del row_data[len(row_data) - 1]
 
 
     # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 
-    row_format ="{:>12}" * (len(row_header) + 1)
-    print(row_format.format("", *row_header))
-    for i in range(1, len(row_data) - 1):
-        print(row_format.format("", *row_data[i]))
+    row_header_format ="{:>12}" * (len(row_header) + 1)
+    row_data_format ="{:>12}" * (len(row_data) + 4)
+
+    print(row_header_format.format("", *row_header))
+    for i in range(1, len(row_data) + 1):
+        print(row_data_format.format("", *row_data[i - 1]))
+
 
 
 def View():
