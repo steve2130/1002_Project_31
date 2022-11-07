@@ -61,9 +61,9 @@ def CSV_creation():
 
 
 
-def CSV_retreveEntireListOfEntries():
+def CSV_retrieveEntireListOfEntries():
     """
-        Retreve all entries in data.csv 
+        Retrieve all entries in data.csv 
 
         Input: nothing
         Output: [[a row of data in data.csv], [another row of data in data.csv], ...] 
@@ -78,6 +78,7 @@ def CSV_retreveEntireListOfEntries():
         for row in data_reader:
                 row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Name"], row["Amount"], row["User entered time"]])
         
+        del row_data[0] # delete header
         return row_data
 
 
