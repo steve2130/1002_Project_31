@@ -335,8 +335,10 @@ def Update():
 
     # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 
-    row_format ="{:>12}" * (len(row_header) + 1)
-    print(row_format.format("", *row_header))
+    row_header_format = "{:>12}" * (len(row_header) + 1)
+    row_data_format = "{:>12}" * (len(row_data) + 1)
+
+    print(row_header_format.format("", *row_header))
     for i in range(1, len(row_data) - 1):
         print(row_format.format("", *row_data[i]))
 
