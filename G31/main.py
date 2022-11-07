@@ -165,6 +165,9 @@ def Record_userInput():
             checkflag_income = True
             income_boolean = False
 
+        elif income.upper() == "EXIT":
+            return
+
         else:
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
             checkflag_income == False
@@ -316,13 +319,51 @@ def Record_userInput():
 
 
 def Update():
-    return
+    row_header = data_IO.CSV_getDefaultRowItems()
+    row_header[0] = "Date"                  # Remove timestamp (uuid) and replaced with {User entered time}
+    del row_header[5]
+
+
+    row_data = data_IO.CSV_retrieveEntireListOfEntries()
+    if (row_data != []):
+        row_data.reverse()                      # To get the latest entries first
+
+        for i in range(0, (len(row_data) - 1)):
+            row_data[i][0] = row_data[i][5]     # replace timestamp with {User entered time}
+            del row_data[i][5]                  # delete {User entered time}
+            # print(row_data[i])
+
+
+
+        # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
+
+        row_header_format = "{:>20}" * (len(row_header))               # {:>16} -> each header takes 16 spaces 
+        row_data_format = "{:>20}" * (len(row_data[0]))
+
+        print("\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
+                                                                              # \t somehow == 8 spaces here
+        print("\t", "－" * 52, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
+                                                                                                                 #      ^^^^ 
+                                                                      # "－" is full-width character, uses two half-width spaces
+        for i in range(1, (len(row_data))):
+            print(f"\t({i}) ", row_data_format.format(*row_data[i - 1]), sep="")        # Will be a mess if user entered a long string for category or name
+
+        print("\t", "－" * 52, "\n", sep="")
+
+
+
+
+    else:
+        EmojiPrint(":(",  "No data in data.csv. Cannot update.")
+
+
+
 
 
 
 
 def View():
-        row_data = data_IO.CSV_retreveEntireListOfEntries()
+        row_data = data_IO.CSV_retrieveEntireListOfEntries()
         print(row_data)
         # Your current balance
         
