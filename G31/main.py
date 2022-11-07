@@ -1,12 +1,4 @@
-# If you are using VS Code and you are debugging with breakpoints,
-# you might want to disable JustMyCode in launch.json
-# Otherwise csv.DictReader and csv.DictWriter so how what do not work.
-
-# https://stackoverflow.com/questions/52980448/how-to-disable-just-my-code-setting-in-vscode-debugger
-
-
-
-import data_IO as data_IO
+import csv_IO as csv_IO
 import re
 
 def main():
@@ -84,7 +76,7 @@ def main_checkDataFileExistence():
         -> return to main menu regardless data.csv is created or not
     """
 
-    if (data_IO.CSV_checkFileExistence() == True):
+    if (csv_IO.CSV_checkFileExistence() == True):
         return True
 
     else:
@@ -98,7 +90,7 @@ def main_checkDataFileExistence():
 
             if option.upper() == "Y" or option.upper() == "YES":
                 checkflag = True                                        
-                data_IO.CSV_creation()
+                csv_IO.CSV_creation()
                 LineBreakPrint("Data file created!\n")
 
                 return False   # So that it will return to the main menu after the file is created.
@@ -118,7 +110,7 @@ def main_checkDataFileExistence():
 
 def Record():
     entry = Record_userInput()
-    data_IO.CSV_writeToFile(entry)
+    csv_IO.CSV_writeToFile(entry)
     EmojiPrint(":)", "Recorded!")
 
 
@@ -270,7 +262,7 @@ def Record_userInput():
         date = str(input("\t>> "))
 
         if (date.upper() == "T" or date.upper() == "TODAY"):
-            date = data_IO.Time_LocalDate()     # Get today date
+            date = csv_IO.Time_LocalDate()     # Get today date
             checkflag_date = True
 
 
@@ -303,7 +295,7 @@ def Record_userInput():
 
     #####################################
     entry = {
-        "Entry created time": data_IO.Time_UTCDateAndTime(),
+        "Entry created time": csv_IO.Time_UTCDateAndTime(),
         "Income" : income_boolean,
         "Category" : category,
         "Name" : name,
@@ -319,12 +311,12 @@ def Record_userInput():
 
 
 def Update():
-    row_header = data_IO.CSV_getDefaultRowItems()
+    row_header = csv_IO.CSV_getDefaultRowItems()
     row_header[0] = "Date"                  # Remove timestamp (uuid) and replaced with {User entered time}
     del row_header[5]
 
 
-    row_data = data_IO.CSV_retrieveEntireListOfEntries()
+    row_data = csv_IO.CSV_retrieveEntireListOfEntries()
     if (row_data != []):
         row_data.reverse()                      # To get the latest entries first
 
@@ -363,7 +355,7 @@ def Update():
 
 
 def View():
-        row_data = data_IO.CSV_retrieveEntireListOfEntries()
+        row_data = csv_IO.CSV_retrieveEntireListOfEntries()
         print(row_data)
         # Your current balance
         
