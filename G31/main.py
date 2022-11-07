@@ -165,6 +165,9 @@ def Record_userInput():
             checkflag_income = True
             income_boolean = False
 
+        elif income.upper() == "EXIT":
+            return
+
         else:
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
             checkflag_income == False
@@ -316,9 +319,26 @@ def Record_userInput():
 
 
 def Update():
-    return
+    row_header = data_IO.CSV_getDefaultRowItems()
+    row_header[0] = "Date"                  # Remove timestamp (uuid) and replaced with {User entered time}
+    del row_header[5]
 
 
+
+    row_data = data_IO.CSV_retreveEntireListOfEntries()
+    row_data.reverse()                      # To get the latest entries first
+    for i in range(len(row_data)):
+        row_data[i][0] = row_data[i][4]     # replace timestamp with {User entered time}
+        del row_data[i][4]                  # delete {User entered time}
+    
+
+
+    # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
+
+    row_format ="{:>12}" * (len(row_header) + 1)
+    print(row_format.format("", *row_header))
+    for i in range(1, len(row_data) - 1):
+        print(row_format.format("", *row_data[i]))
 
 
 def View():
