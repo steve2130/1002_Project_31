@@ -138,11 +138,11 @@ def Record_userInput():
     user_IO.FunctionIndentLineBreakPrint("Record your income or spending here!")
 
     timestamp = csv_IO.Time_UTCDateAndTime()
-    income = user_IO.Record_userInput_Income()
-    category = user_IO.Record_userInput_Category()
-    name = user_IO.Record_userInput_Name(category)
-    amount = user_IO.Record_userInput_Amount()
-    date = user_IO.Record_userInput_Date()
+    income    = user_IO.Record_userInput_Income()
+    category  = user_IO.Record_userInput_Category()
+    name      = user_IO.Record_userInput_Name(category)
+    amount    = user_IO.Record_userInput_Amount()
+    date      = user_IO.Record_userInput_Date()
 
     entry = {
         "Entry created time": timestamp,
@@ -161,44 +161,14 @@ def Record_userInput():
 
 
 def Update():
-    row_header = csv_IO.CSV_getDefaultRowItems()
-    row_header[0] = "Date"                  # Remove timestamp (uuid) and replaced with {User entered time}
-    del row_header[5]
+    row_header = user_IO.Update_getRowHeader()
+    entries = user_IO.Update_getEntries()
 
-
-    row_data = csv_IO.CSV_retrieveEntireListOfEntries()
-    if (row_data != []):
-        row_data.reverse()                      # To get the latest entries first
-
-        for i in range(0, len(row_data)):
-            row_data[i][0] = row_data[i][5]     # replace timestamp with {User entered time}
-            del row_data[i][5]                  # delete {User entered time}
-            # print(row_data[i])
-
-
-
-        # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
-
-        row_header_format = "{:>20}" * (len(row_header))               # {:>20} -> each header takes 20 spaces 
-        row_data_format = "{:>20}" * (len(row_data[0]))
-
-        print("\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
-                                                                              # \t somehow == 8 spaces here
-        print("\t", "－" * 52, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
-                                                                                                                 #      ^^^^ 
-                                                                      # "－" is full-width character, uses two half-width spaces
-        for i in range(0, (len(row_data))):
-            print(f"\t({i + 1}) ", row_data_format.format(*row_data[i]), sep="")        # Will be a mess if user entered a long string for category or name
-
-        print("\t", "－" * 52, "\n", sep="")
-
-
-
-
-    else:
+    if (entries == False):
         user_IO.EmojiPrint(":(",  "No data in data.csv. Cannot update.")
 
-
+    else:
+        user_IO.Update_printEntries(row_header, entries)
 
 
 

@@ -6,6 +6,11 @@ import main
 import csv_IO as csv_IO
 import re
 
+
+
+
+# Record()
+########################################################################################################
 def Record_userInput_Income():
     checkflag_income = False
 
@@ -168,10 +173,62 @@ def Record_userInput_Date():
 
 
 
+########################################################################################################
+# Update()
+
+def Update_getRowHeader():
+    row_header = csv_IO.CSV_getDefaultRowItems()
+    row_header[0] = "Date"                  # Remove timestamp (uuid) and replaced with {User entered time}
+    del row_header[5]
+
+    return row_header
 
 
 
-#-----------------------------------------------------------------
+
+
+def Update_getEntries():
+    entries = csv_IO.CSV_retrieveEntireListOfEntries()
+    if (entries != []):
+        entries.reverse()                      # To get the latest entries first
+
+        for i in range(0, len(entries)):
+            entries[i][0] = entries[i][5]     # replace timestamp with {User entered time}
+            del entries[i][5]                  # delete {User entered time}
+
+        return entries
+
+    else:
+        return False
+
+
+
+def Update_printEntries(row_header, entries):
+        # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
+
+        row_header_format = "{:>24}" * (len(row_header))               # {:>20} -> each header takes 20 spaces 
+        entries_format = "{:>24}" * (len(entries[0]))
+
+        print("\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
+                                                                              # \t somehow == 8 spaces here
+        print("\t", "－" * 62, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
+                                                                                                                 #      ^^^^ 
+                                                                      # "－" is full-width character, uses two half-width spaces
+        for i in range(0, (len(entries))):
+            if (i < 9):                                                                   # To make the (1) and (10) aligned in the table
+                print(f"\t({i + 1}) ", entries_format.format(*entries[i]), sep="")        # Will be a mess if user entered a long string for category or name
+
+            else:
+                print(f"\t({i + 1})", entries_format.format(*entries[i]), sep="")        
+
+        print("\t", "－" * 62, "\n", sep="")
+
+
+
+
+
+
+########################################################################################################
 # Misc
 
 # Basically just some different versions of print()
