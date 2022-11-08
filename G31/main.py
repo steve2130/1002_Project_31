@@ -162,9 +162,9 @@ def Record_userInput():
 
 def Update():
 
-
     print(" ")
     row_header = user_IO.Update_getRowHeader()
+    row_data = csv_IO.CSV_retrieveEntireListOfEntries()
     entries = user_IO.Update_getEntries()
 
     if (entries == False):
@@ -173,11 +173,17 @@ def Update():
     else:
         user_IO.Update_printEntries(row_header, entries)
 
-        entry_number = user_IO.Update_getEntryNumber(len(entries))
+        entry_number = user_IO.Update_getEntryNumber(len(entries))      # Just to stop user to enter a number bigger than the length of entries
         entry_column = user_IO.Update_getIntentedHeader()
+        edit_content = user_IO.Update_processEntryColumn(entry_column)      # [0] = content to be edited     [1] = index of the column in .csv
 
-        print(f"{entry_number}, {entry_column}")
+        row_data[(len(row_data) - entry_number)][edit_content[1]] = edit_content[0]
+        row_data[(len(row_data) - entry_number)][0] = csv_IO.Time_UTCDateAndTime()
+        # e.g. Select the column 1 from the list. Choose the cathgory using {edit_content[1]}. Change its content to {edit_content[0]}
 
+        csv_IO.CSV_overwriteToFile(row_data)
+
+        user_IO.FunctionIndentLineBreakPrint("\033[1;32mUpdated!\033[0;0m\n")
 
 
 
