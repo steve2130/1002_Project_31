@@ -54,10 +54,15 @@ def Record_userInput_Category():
         if (re.match("[a-zA-Z]", category)):                    # regex. Return true if it find a character in {category}. 
                                                                 # Return false if number is place before characters. like "6x crab", "7x beer"
             category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
-            checkflag_category = True
 
-            return category
+            if (len(category) > 26):
+                FunctionIndentPrint("\033[3;35mUmm...\033[0;0m You can only enter no more than 25 characters here. Sorry!")
+                checkflag_category = False
         
+            else:
+                checkflag_category = True
+                return category
+
         else:
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
             checkflag_category = False
@@ -86,26 +91,26 @@ def Record_userInput_Category():
 
 
 
-def Record_userInput_Name(category):
+def Record_userInput_Name():
     checkflag_name = False
 
     while(checkflag_name == False):
-        FunctionIndentLineBreakPrint("\033[3;33mWould you like to give it a name?\033[0;0m")
+        FunctionIndentLineBreakPrint("\033[3;33mGive this record a name!\033[0;0m")
         FunctionIndentPrint(" - \033[3;33mFor example: (\033[4;36mFood\033[0;0m\033[3;33m - \033[4;32mKFC\033[0;0m\033[3;33m), (\033[4;36mTraffic\033[0;0m\033[3;33m - \033[4;32mbus[215X]\033[0;0m\033[3;33m), (\033[4;36mShopping\033[0;0m\033[3;33m - \033[4;32mSteam\033[0;0m\033[3;33m).\033[0;0m")
         # CSS, the most hated thing in this entire earth, is still better than this crap
         # even brainf*ck is better than this
 
         name = str(input("\t>> "))
-        if (name == ""):                  # Check for empty string
-            name = category
-            checkflag_name = True
 
-            return name
             
-        elif (name.strip() != ""):        # Check for space-only input: "    "
-            checkflag_name = True
-            
-            return name
+        if (name.strip() != ""):        # Check for space-only input: "    "
+            if (len(name) > 26):
+                FunctionIndentPrint("\033[3;35mUmm...\033[0;0m You can only enter no more than 25 characters here. Sorry!")
+                checkflag_name = False
+
+            else:
+                checkflag_name = True
+                return name
 
         else:
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
@@ -122,11 +127,19 @@ def Record_userInput_Amount():
         FunctionIndentLineBreakPrint("\033[3;33mHow much is that?\033[0;0m")
 
         try: 
-            amount = float(input("\t>> $"))
+            amount = input("\t>> $")
+            amount_len = len(amount)
+            amount = float(amount)
             amount = round(amount, 2)       # round the $ to 2 dec place -> 200.689 -> 200.69
-            checkflag_amount = True
 
-            return amount
+
+            if (amount_len > 13):
+                FunctionIndentPrint("\033[3;35mUmm...\033[0;0m You can only enter no more than 12 numbers here. Sorry!")
+                checkflag_amount = False
+
+            else:
+                checkflag_amount = True
+                return amount
         
         except:
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a number.")
@@ -190,6 +203,7 @@ def Update_getRowHeader():
 def Update_getEntries():
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
     if (entries != []):
+        del entries[0]                        # delete header
         entries.reverse()                      # To get the latest entries first
 
         for i in range(0, len(entries)):
@@ -206,12 +220,12 @@ def Update_getEntries():
 def Update_printEntries(row_header, entries):
         # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 
-        row_header_format = "\033[1;36m{:>24}\033[0;0m" * (len(row_header))               # {:>20} -> each header takes 20 spaces.  And cyan color
-        entries_format = "{:>24}" * (len(entries[0]))
+        row_header_format = "\033[1;36m{:>26}\033[0;0m" * (len(row_header))               # {:>20} -> each header takes 20 spaces.  And cyan color
+        entries_format = "{:>26}" * (len(entries[0]))
 
         print("\t\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
                                                                               # \t somehow == 8 spaces here
-        print("\t\t", "－" * 62, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
+        print("\t\t", "－" * 67, sep="")                                # 5*(26/2)+2 = 52. +2 because the spaces above "\t    ". 
                                                                                                                  #      ^^^^ 
                                                                       # "－" is full-width character, uses two half-width spaces
         for i in range(0, (len(entries))):
@@ -219,9 +233,12 @@ def Update_printEntries(row_header, entries):
                 print(f"\t\t({i + 1}) ", entries_format.format(*entries[i]), sep="")        # Will be a mess if user entered a long string for category or name
 
             else:
+                if (i % 10 == 0):
+                    print("\t\t", "＝" * 67, sep="")
+                    
                 print(f"\t\t({i + 1})", entries_format.format(*entries[i]), sep="")        
 
-        print("\t\t", "－" * 62, "\n", sep="")
+        print("\t\t", "－" * 67, "\n", sep="")
 
 
 
@@ -229,29 +246,25 @@ def Update_printEntries(row_header, entries):
 
 def Update_getEntryNumber(entries_len):
     checkflag = False
+    entries_len += 1
 
     while(checkflag != True):
         try:    # type verification
             FunctionIndentPrint("Enter the number of entry you would like to update.")
             entry_number = int(input("\t>> "))
 
-            if (entry_number > entries_len):
-                EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
-                checkflag = False
-
-            elif (entry_number <= 0):
-                EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
-                checkflag = False
-
+            # the first two if and elif checks the entered number is between 0 and length of the entire list of entries
+            if (entries_len > entry_number and entry_number > 0):        
+                checkflag = True
+                return entry_number                                            
 
             else:
-                checkflag = True
-                return entry_number
+                EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
+                checkflag = False
 
         except:
             EmojiPrint("\t\t:(", "Invaild input. You need to enter a number here!")
             checkflag = False
-
 
 
 
@@ -266,12 +279,43 @@ def Update_getIntentedHeader():
 
         if (entry_column.upper() in ("DATE", "INCOME", "CATEGORY", "NAME", "AMOUNT")):
             checkflag = True
-            return entry_column
+            return entry_column.upper()
         
         else:
             EmojiPrint("\t\t:(", "Invaild input.")
             checkflag = False
         
+
+
+
+
+def Update_processEntryColumn(entry_column):
+            # want use switch...
+        if (entry_column == "DATE"):
+            edit = Record_userInput_Date()
+            csv_index = 5   # index of {user inputed time} in data.csv
+            return [edit, csv_index]
+
+        elif(entry_column == "INCOME"):
+            edit = Record_userInput_Income()
+            csv_index = 1
+            return [edit, csv_index]
+
+        elif(entry_column == "CATEGORY"):
+            edit = Record_userInput_Category()
+            csv_index = 2
+            return [edit, csv_index]
+
+        elif(entry_column == "NAME"):
+            edit = Record_userInput_Name()
+            csv_index = 3
+            return [edit, csv_index]
+
+        elif(entry_column == "AMOUNT"):
+            edit = Record_userInput_Amount()
+            csv_index = 4
+            return [edit, csv_index]
+
 
 
 

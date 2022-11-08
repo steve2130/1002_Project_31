@@ -72,13 +72,12 @@ def CSV_retrieveEntireListOfEntries():
 
     # How to write or read csv
     # https://blog.gtwang.org/programming/python-csv-file-reading-and-writing-tutorial/
-    with open("data.csv") as data_csv:
+    with open("data.csv", "r") as data_csv:
         data_reader = csv.DictReader(data_csv, fieldnames=CSV_getDefaultRowItems())
 
         for row in data_reader:
                 row_data.append([row["Entry created time"], row["Income"], row["Category"], row["Name"], row["Amount"], row["User entered time"]])
         
-        del row_data[0] # delete header
         return row_data
 
 
@@ -94,6 +93,21 @@ def CSV_writeToFile(entry):
         # **Will bugged if another process (e.g. excel) is opening data.csv
 
         # print("\n\t :( Something is wrong with writing to the data file.\n")
+
+
+
+
+
+def CSV_overwriteToFile(data):
+    """
+        For updating the entries
+        .csv cannot edit one element at a time
+        it must overwrites the entire .csv 
+    """
+    with open("data.csv", "w") as data_csv:
+        # overwriting the entire thing so "w"
+        data_writer = csv.writer(data_csv)
+        data_writer.writerows(data)
 
 
 
