@@ -161,14 +161,24 @@ def Record_userInput():
 
 
 def Update():
+
+
+    print(" ")
     row_header = user_IO.Update_getRowHeader()
     entries = user_IO.Update_getEntries()
 
     if (entries == False):
-        user_IO.EmojiPrint(":(",  "No data in data.csv. Cannot update.")
+        user_IO.EmojiPrint(":(", "No data in data.csv. Cannot update.")
 
     else:
         user_IO.Update_printEntries(row_header, entries)
+
+        entry_number = user_IO.Update_getEntryNumber(len(entries))
+        entry_column = user_IO.Update_getIntentedHeader()
+
+        print(f"{entry_number}, {entry_column}")
+
+
 
 
 

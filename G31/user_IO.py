@@ -206,24 +206,72 @@ def Update_getEntries():
 def Update_printEntries(row_header, entries):
         # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 
-        row_header_format = "{:>24}" * (len(row_header))               # {:>20} -> each header takes 20 spaces 
+        row_header_format = "\033[1;36m{:>24}\033[0;0m" * (len(row_header))               # {:>20} -> each header takes 20 spaces.  And cyan color
         entries_format = "{:>24}" * (len(entries[0]))
 
-        print("\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
+        print("\t\t    ", row_header_format.format(*row_header), sep="")        # * = all elements in the list
                                                                               # \t somehow == 8 spaces here
-        print("\t", "－" * 62, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
+        print("\t\t", "－" * 62, sep="")                                # 5*(20/2)+2 = 52. +2 because the spaces above "\t    ". 
                                                                                                                  #      ^^^^ 
                                                                       # "－" is full-width character, uses two half-width spaces
         for i in range(0, (len(entries))):
             if (i < 9):                                                                   # To make the (1) and (10) aligned in the table
-                print(f"\t({i + 1}) ", entries_format.format(*entries[i]), sep="")        # Will be a mess if user entered a long string for category or name
+                print(f"\t\t({i + 1}) ", entries_format.format(*entries[i]), sep="")        # Will be a mess if user entered a long string for category or name
 
             else:
-                print(f"\t({i + 1})", entries_format.format(*entries[i]), sep="")        
+                print(f"\t\t({i + 1})", entries_format.format(*entries[i]), sep="")        
 
-        print("\t", "－" * 62, "\n", sep="")
+        print("\t\t", "－" * 62, "\n", sep="")
 
 
+
+
+
+def Update_getEntryNumber(entries_len):
+    checkflag = False
+
+    while(checkflag != True):
+        try:    # type verification
+            FunctionIndentPrint("Enter the number of entry you would like to update.")
+            entry_number = int(input("\t>> "))
+
+            if (entry_number > entries_len):
+                EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
+                checkflag = False
+
+            elif (entry_number <= 0):
+                EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
+                checkflag = False
+
+
+            else:
+                checkflag = True
+                return entry_number
+
+        except:
+            EmojiPrint("\t\t:(", "Invaild input. You need to enter a number here!")
+            checkflag = False
+
+
+
+
+
+
+def Update_getIntentedHeader():
+    checkflag = False
+
+    while(checkflag != True):
+        FunctionIndentLineBreakPrint("Enter the column you would like to update. \033[3;33m(Date, Income, Category, Name, Amount)\033[0;0m")
+        entry_column= str(input("\t>> "))
+
+        if (entry_column.upper() in ("DATE", "INCOME", "CATEGORY", "NAME", "AMOUNT")):
+            checkflag = True
+            return entry_column
+        
+        else:
+            EmojiPrint("\t\t:(", "Invaild input.")
+            checkflag = False
+        
 
 
 
@@ -240,7 +288,7 @@ def LineBreakPrint(string):
     print("\n\t", str(string), "\n", sep="")
 
 def EmojiPrint(emoji, string):
-    print("\n     ", str(emoji), " ", str(string), "\n", sep="")
+    print("\n     ", f"\033[0;31m{emoji}\033[0;0m", " ", str(string), "\n", sep="")
 
 def FunctionIndentPrint(string):
     # For sub-functions e.g. Record(), Update(), View()
