@@ -254,9 +254,12 @@ def Update_getEntryNumber(entries_len):
             entry_number = int(input("\t>> "))
 
             # the first two if and elif checks the entered number is between 0 and length of the entire list of entries
-            if (entries_len > entry_number and entry_number > 0):        
+            if (entries_len > int(entry_number) and int(entry_number) > 0):        
                 checkflag = True
-                return entry_number                                            
+                return int(entry_number)                  
+
+            elif (entry_number.upper() == "EXIT"):
+                main.main()                                 # return to main menu
 
             else:
                 EmojiPrint("\t\t:(", "Invaild input. Cannot find the relevant record")
