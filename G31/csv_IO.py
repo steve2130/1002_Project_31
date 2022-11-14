@@ -4,8 +4,6 @@
 
 import csv
 from datetime import datetime                   # need the date
-import time                                     # Unix time epoch
-
 
 def CSV_getDefaultRowItems():
     """Just to avoid creating var {Default_row_items} every time I want to use it"""
@@ -122,9 +120,15 @@ def CSV_overwriteToFile(data):
 # Time
 def Time_UTCDateAndTime():
     """Return current UTC time in seconds"""
-    return int(time.time())
+    # https://stackoverflow.com/questions/15940280/how-to-get-utc-time-in-python
+    return int(datetime.now(timezone.utc).timestamp() * 1000)
 
 def Time_LocalDate():
     """Return current local date"""
     # https://stackoverflow.com/questions/32490629/getting-todays-date-in-yyyy-mm-dd-in-python
     return str(datetime.today().strftime('%Y-%m-%d'))
+
+
+
+if __name__ == "__main__":
+    print(Time_UTCDateAndTime())
