@@ -2,8 +2,7 @@
 # Tommy
 
 
-import csv      
-from os import path
+import csv
 from datetime import datetime                   # need the date
 import time                                     # Unix time epoch
 
@@ -44,7 +43,13 @@ def CSV_getDefaultRowItems():
 
 def CSV_checkFileExistence():
     """Check if data.csv exist in the path of .py files"""
-    return path.isfile("data.csv")
+
+    try:
+        with open("data.csv") as file:
+            return True
+    except:
+        return False
+        
     
 
 
