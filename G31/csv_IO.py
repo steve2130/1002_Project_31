@@ -1,14 +1,16 @@
 # Input/store/update/retrieve the income(s), spendings and other allocations
 # Tommy
 
+import os                         # To check if a file is not open or being used by another process
+from datetime import datetime     # need the date 
+import user_IO
+import main
+             
 
-import csv
-from datetime import datetime                   # need the date
-
-def CSV_getDefaultRowItems():
-    """Just to avoid creating var {Default_row_items} every time I want to use it"""
-    return "User Entered Date, Income, Category, Name, Amount"
-          # timestamp          boolean  string   str   float      
+def CSV_getDefaultColumnItems():
+    """Just to avoid creating var {Default_column_items} every time I want to use it"""
+    return "User Entered Date,Income,Category,Name,Amount"
+          # timestamp        boolean  string  str   float      
 
 
             # User Entered Date:  String
@@ -38,7 +40,7 @@ def CSV_checkFileExistence():
     """Check if data.csv exist in the path of .py files"""
 
     try:
-        with open("data.csv") as file:
+        with open("data.csv"):
             return True
     except:
         return False                    # Return false if there is an error when opening data.csv
@@ -46,14 +48,25 @@ def CSV_checkFileExistence():
     
 
 
+
+def CSV_checkFileOpenByOtherProcess():
+    if os.path.exists("data.csv"):
+        try:
+            os.rename("data.csv", "data.csv")
+
+        except:
+            user_IO.FunctionIndentLineBreakPrint("\033[1;31m[🗙 ]\033[0;0m Cannot edit data.csv as it is opened by other application. \n")
+            main.main()
+
+
+
 def CSV_creation():
     """Create .csv file if there isn't one, and write the header to the file."""
     # https://stackoverflow.com/questions/58992872/how-to-create-a-csv-file-in-python-script-if-it-doesnt-exist-in-the-directory
-    default_row_items = CSV_getDefaultRowItems()
-    # default_row_items = ",".join(default_row_items)
+    default_column_items = CSV_getDefaultColumnItems()
     
     with open("data.csv", "w") as data_csv:
-        data_csv.write(default_row_items)  # write the columns of the csv with elements of {default_row_items}
+        data_csv.write(default_column_items)  # write the columns of the csv with elements of {default_row_items}
 
 
 
@@ -88,6 +101,8 @@ def CSV_retrieveEntireListOfEntries():
 
 
 def CSV_writeToFile(entry):
+    CSV_checkFileOpenByOtherProcess()
+
     with open("data.csv", "a") as data_csv:
         # "r" or "w" or "a"
         # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
@@ -108,11 +123,16 @@ def CSV_overwriteToFile(data):
         .csv cannot edit one element at a time
         it must overwrites the entire .csv 
     """
+    CSV_checkFileOpenByOtherProcess()
     # https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
     with open("data.csv", "w") as data_csv:
         # overwriting the entire thing so "w"
-        data_writer = csv.writer(data_csv)
-        data_writer.writerows(data)
+        data_csv.write(data)
+
+
+
+
+
 
 
 
@@ -125,6 +145,3 @@ def Time_LocalDate():
     return str(datetime.today().strftime('%Y-%m-%d'))
 
 
-
-# if __name__ == "__main__":
-#     print(CSV_retrieveEntireListOfEntries())

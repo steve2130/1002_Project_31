@@ -7,6 +7,7 @@ import user_IO as user_IO
 
 def main():
     """
+    
         Hello! This expense tracker helps you to keep track of your incomes and expenses.
         How can I help you?
     """
@@ -130,7 +131,7 @@ def Record_userInput():
     """
     Record user's inputs and store them in data.csv
 
-    Input: refer to {CSV_getDefaultRowItems()} in csv_IO.py 
+    Input: refer to {CSV_getDefaultColumnItems()} in csv_IO.py 
     Output: a string that contains the record of user income/spending  
     """
     print(" ")
@@ -156,7 +157,7 @@ def Record_userInput():
 def Update():
     
     print(" ")
-    row_header = user_IO.Update_getRowHeader()
+    column_header = user_IO.Update_getColumnHeader()
     row_data = csv_IO.CSV_retrieveEntireListOfEntries()     # entire list with header and in original order
     entries = user_IO.Update_getEntries()                   # list without header and in reverse order
 
@@ -164,7 +165,7 @@ def Update():
         user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "No data in data.csv. Cannot update.")
 
     else:
-        user_IO.Update_printEntries(row_header, entries)
+        user_IO.Update_printEntries(column_header, entries)
 
         entry_number = user_IO.Update_getEntryNumber(len(entries))      # Just to stop user to enter a number bigger than the length of entries
         entry_column = user_IO.Update_getIntentedHeader()
@@ -174,8 +175,20 @@ def Update():
                     #  ^^^ Because the displayed list is reverse, we need to retrive the correct entry using this
 
         # e.g. user select the the first entry from the list. Pick the corresponding column (cathgory) using {edit_content[1]}. Change its content to {edit_content[0]}
+        
 
-        csv_IO.CSV_overwriteToFile(row_data)
+
+
+        row_data = [','.join(x) for x in row_data]      # As row_data is a lists in list, this converts the lists inside the overall list to string
+                                                        # [['User Entered Date', 'Income', 'Category', 'Name', 'Amount'], ['2022-11-15', 'False', 'Kfc', 'kfc', '15000.0'], ['2022-11-15', 'False', 'Food', 'KFC', '4.0']]
+                                                        #  ↓
+                                                        # ['User Entered Date,Income,Category,Name,Amount', '2022-11-15,False,Kfc,kfc,15000.0', '2022-11-15,False,Food,KFC,4.0']
+                                                        # https://stackoverflow.com/questions/22105741/converting-a-list-of-lists-into-a-list-of-strings-python
+        
+        row_string = "\n".join(row_data)                #  ↓
+                                                        # 'User Entered Date,Income,Category,Name,Amount\n2022-11-15,False,Kfc,kfc,15000.0\n2022-11-15,False,Food,KFC,4.0\n2022-11-15,True,Salary,HAS,15000.0'
+
+        csv_IO.CSV_overwriteToFile(row_string)
         # https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
 
         user_IO.EmojiPrint("\t\033[0;32m:)\033[0;0m", "\033[2;32mUpdated!\033[0;0m\n")

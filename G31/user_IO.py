@@ -93,20 +93,25 @@ def Record_userInput_Category():
 
         category = input("\t>> ")
 
-        if any(x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" for x in category[0].upper()):
-                                                                # https://stackoverflow.com/questions/57062794/how-to-check-if-a-string-has-any-special-characters                    
-                                                                # Return false if number is place before characters. like "6x crab", "7x beer"
-            category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
+        try:
+            if any(x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" for x in category[0].upper()):
+                                                                    # https://stackoverflow.com/questions/57062794/how-to-check-if-a-string-has-any-special-characters                    
+                                                                    # Return false if number is place before characters. like "6x crab", "7x beer"
+                category = category[0].upper() + category[1:]       # Capitalize the first letter of {category}
 
-            if (len(category) > 26):
-                FunctionIndentPrint("\033[3;31mUmm...\033[0;0m You can only enter no more than 25 characters here. Sorry!")
-                checkflag_category = False
-        
+                if (len(category) > 26):
+                    FunctionIndentPrint("\033[3;31mUmm...\033[0;0m You can only enter no more than 25 characters here. Sorry!")
+                    checkflag_category = False
+            
+                else:
+                    checkflag_category = True
+                    return category
+
             else:
-                checkflag_category = True
-                return category
+                FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
+                checkflag_category = False
 
-        else:
+        except:     # If user enter nothing
             FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter a word as a category.")
             checkflag_category = False
 
@@ -200,18 +205,18 @@ def Record_userInput_Amount():
 ########################################################################################################
 # Update()
 
-def Update_getRowHeader():
-    row_header = csv_IO.CSV_getDefaultRowItems()
-    row_header = row_header.split(",")
-    row_header[0] = "Date"      # Replace "User Entered Date" with "Date"
-    return row_header
+def Update_getColumnHeader():
+    column_header = csv_IO.CSV_getDefaultColumnItems()
+    column_header = column_header.split(",")
+    column_header[0] = "Date"      # Replace "User Entered Date" with "Date"
+    return column_header
 
 
 
 
 
-def Update_getEntries():
-    entries = csv_IO.CSV_retrieveEntireListOfEntries()
+def Update_getEntries():            # if input {row_data} here, python will also change the content of {row_data}
+    entries = csv_IO.CSV_retrieveEntireListOfEntries()  
     if (entries != []):
         del entries[0]                        # delete header
         entries.reverse()                      # To get the latest entries first
