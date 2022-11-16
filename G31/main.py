@@ -174,7 +174,7 @@ def Update():
         row_data[(len(row_data) - entry_number)][edit_content[1]] = edit_content[0]
                     #  ^^^ Because the displayed list is reverse, we need to retrive the correct entry using this
 
-        # e.g. user select the the first entry from the list. Pick the corresponding column (cathgory) using {edit_content[1]}. Change its content to {edit_content[0]}
+        # e.g. user select the the first entry from the list. Pick the corresponding column (category) using {edit_content[1]}. Change its content to {edit_content[0]}
         
 
 
