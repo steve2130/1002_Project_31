@@ -192,15 +192,16 @@ def Update():
         # https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
 
         user_IO.EmojiPrint("\t\033[0;32m:)\033[0;0m", "\033[2;32mUpdated!\033[0;0m\n")
-        # user_IO.FunctionIndentLineBreakPrint("\033[1;32mUpdated!\033[0;0m\n")
 
 
 
 
 
 def View():
-        row_data = csv_IO.CSV_retrieveEntireListOfEntries()
-        print(row_data)
+        entries = csv_IO.CSV_retrieveEntireListOfEntries()
+        balance = user_IO.View_getCurrentBalance(entries)
+        
+        print(balance)
         # Your current balance
         
 

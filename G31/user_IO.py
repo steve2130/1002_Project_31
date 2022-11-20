@@ -335,6 +335,23 @@ def Update_processEntryColumn(entry_column):
 
 
 ########################################################################################################
+# View
+
+def View_getCurrentBalance(entries):
+    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
+    expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
+
+    income_value_list = [float(column[4]) for column in income_entries]
+    expense_value_list = [float(column[4]) for column in expense_entries]
+
+    return (sum(income_value_list) - sum(expense_value_list))
+    # for x in range(len(income)):
+        
+
+
+
+
+########################################################################################################
 # Misc
 
 # Basically just some different versions of print()
