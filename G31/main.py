@@ -156,7 +156,7 @@ def Record_userInput():
 
 def Update():
     
-    print(" ")
+    print(" ")      # line break
     column_header = user_IO.Update_getColumnHeader()
     row_data = csv_IO.CSV_retrieveEntireListOfEntries()     # entire list with header and in original order
     entries = user_IO.Update_getEntries()                   # list without header and in reverse order
@@ -171,7 +171,7 @@ def Update():
         entry_column = user_IO.Update_getIntentedHeader()
         edit_content = user_IO.Update_processEntryColumn(entry_column)      # [0] = content to be edited     [1] = index of the column in .csv
 
-        row_data[(len(row_data) - entry_number)][edit_content[1]] = edit_content[0]
+        row_data[(len(row_data) - entry_number)][edit_content[1]] = str(edit_content[0])
                     #  ^^^ Because the displayed list is reverse, we need to retrive the correct entry using this
 
         # e.g. user select the the first entry from the list. Pick the corresponding column (cathgory) using {edit_content[1]}. Change its content to {edit_content[0]}
@@ -191,7 +191,7 @@ def Update():
         csv_IO.CSV_overwriteToFile(row_string)
         # https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
 
-        user_IO.EmojiPrint("\t\033[0;32m:)\033[0;0m", "\033[2;32mUpdated!\033[0;0m\n")
+        user_IO.EmojiPrint("\n\t\033[0;32m:)\033[0;0m", "\033[2;32mUpdated!\033[0;0m\n")
 
 
 

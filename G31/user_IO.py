@@ -231,25 +231,57 @@ def Update_getEntries():            # if input {row_data} here, python will also
 def Update_printEntries(row_header, entries):
         # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 
-        row_header_format = "\033[1;36m{:>26}\033[0;0m" * 5       # {:>20} -> each header takes 20 spaces.  And cyan color.   * by the length of row_header (i.e. 5)
-        entries_format = "{:>26}" * 5                             # * by How many column
+        row_header_format = "\033[1;36m{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}\033[0;0m"      # {:>20} -> each header takes 20 spaces.  And cyan color.
+        entries_format = "{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}"     # * by How many column
+        
+        
+        length = []                                     # To get the length of each column
+        for j in range(0, len(entries[0])):
+            length.append(len(entries[0][j]))           # Get the length of column in the first row
 
-        print("\t\t    ", row_header_format.format(*row_header), sep="")      # * = all elements in the list
-                                                                              # idk but \t == 8 spaces here
-        print("\t\t", "－" * 67, sep="")                                   # 5*(26/2)+2 = 67. +2 because the spaces for print function above,  "\t    ". 
-                                                                                                                                           #      ^^^^ 
+        for i in range(0, len(entries) - 1):
+            for k in range(0, len(entries[i])):
+                if (len(entries[i][k]) > length[k]):
+                    length[k] = len(entries[i][k])      # Compare the length of column with other rows
+
+
+
+
+
+
+
+
+        for i in range(0, (len(entries))):                      # Replace "True" & "False" in Income column with "Income" and "Expense"
+            if (entries[i][1].upper() == "TRUE"):
+                entries[i][1] = "\033[3;34mIncome\033[0;0m"     # Give "Income" blue color
+            
+            elif (entries[i][1].upper() == "FALSE"):
+                entries[i][1] = "\033[3;33mExpense\033[0;0m"    # Give "Expense" yellow color
+            
+        for x in range(0, len(length)):
+            length[x] = int(length[x]) + 10
+
+
+        income_length = int(length[1]) + 7 + 6       # Compensate for "\033[3;33m" and "\033[0;0m""
+                                                            #     ^(len = 7)        ^((len = 6)
+                                                            # \033 is 1 character
+
+        print("\t\t    ", row_header_format.format(*row_header, date_length = int(length[0]), income_length = int(length[1]), category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")      # * = all elements in the list
+                                                                # idk but \t == 8 spaces here
+        print("\t\t", "－" * int(sum(length) / 2 + 2), sep="")       # +2 because the spaces for print function above,  "\t    ". 
+                                                                                                                #      ^^^^ 
                                                                       # "－" is full-width character, uses two half-width spaces
         for i in range(0, (len(entries))):
-            if (i < 9):                                                                   # To make the (1) and (10) aligned in the table
-                print(f"\t\t({i + 1}) ", entries_format.format(*entries[i]), sep="")        # Will be a mess if user entered a long string for category or name
+            if (i < 9):                                               # To make the (1) and (10) aligned in the table
+                print(f"\t\t({i + 1}) ", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        # Will be a mess if user entered a long string for category or name
 
             else:
                 if (i % 10 == 0):
-                    print("\t\t", "＝" * 67, sep="")
+                    print("\t\t", "＝" * int(sum(length) / 2 + 2), sep="")
                     
-                print(f"\t\t({i + 1})", entries_format.format(*entries[i]), sep="")        
+                print(f"\t\t({i + 1})", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        
 
-        print("\t\t", "－" * 67, "\n", sep="")
+        print("\t\t", "－" * int(sum(length) / 2 + 2), "\n", sep="")
 
 
 
