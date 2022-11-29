@@ -10,6 +10,33 @@ import csv_IO as csv_IO
 
 # Record()
 ########################################################################################################
+def Record_userInput():
+    """
+    Record user's inputs and store them in data.csv
+
+    Input: refer to {CSV_getDefaultColumnItems()} in csv_IO.py 
+    Output: a string that contains the record of user income/spending  
+    """
+    print(" ")
+    FunctionIndentPrint("🡫 🡫 🡫")
+    FunctionIndentLineBreakPrint("Record your income or spending here!")
+    FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+
+
+    date      = Record_userInput_Date()
+    income    = Record_userInput_Income()
+    category  = Record_userInput_Category()
+    name      = Record_userInput_Name()
+    amount    = Record_userInput_Amount()
+
+    entry = f"{date},{income},{category},{name},{amount}"
+    
+    return entry
+
+
+
+
+
 def Record_userInput_Date():
     checkflag_date = False
 
@@ -42,12 +69,12 @@ def Record_userInput_Date():
                         return date
 
                     else:
-                        FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T' / 'Today', or a vaild date (YYYY-MM-DD).")
+                        FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either '\033[3;34mT\033[0;0m' or '\033[3;34mToday\033[0;0m', or a vaild date (\033[3;34mYYYY-MM-DD\033[0;0m).")
                         checkflag_date = False
        
         except:
             # should land here if user enter a string
-            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'T'/'Today', or a vaild date (YYYY-MM-DD).")
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either '\033[3;34mT\033[0;0m' or '\033[3;34mToday\033[0;0m', or a vaild date (\033[3;34mYYYY-MM-DD\033[0;0m).")
             checkflag_date = False
 
 
@@ -78,7 +105,7 @@ def Record_userInput_Income():
 
 
         else:
-            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either 'I' or 'E'.\n")
+            FunctionIndentPrint("\033[1;31m[🗙 ]\033[0;0m Invaild input. Please enter either '\033[3;34mI\033[0;0m' or '\033[3;34mE\033[0;0m'.\n")
             checkflag_income == False
 
 
@@ -178,7 +205,7 @@ def Record_userInput_Amount():
             amount = input("\t>> $")
             amount_len = len(amount)
             amount = float(amount)
-            amount = round(amount, 2)       # round the $ to 2 dec place -> 200.689 -> 200.69
+            amount = round(amount, 1)       # round the $ to 1 dec place -> 200.69 -> 200.7
 
 
             if (amount_len > 13):
@@ -230,6 +257,7 @@ def Update_getEntries():            # if input {row_data} here, python will also
 
 def Update_printEntries(row_header, entries):
         # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
+        # Good luck on maintaining it
 
         row_header_format = "\033[1;36m{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}\033[0;0m"      # {:>20} -> each header takes 20 spaces.  And cyan color.
         entries_format = "{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}"     # * by How many column
@@ -246,11 +274,6 @@ def Update_printEntries(row_header, entries):
 
 
 
-
-
-
-
-
         for i in range(0, (len(entries))):                      # Replace "True" & "False" in Income column with "Income" and "Expense"
             if (entries[i][1].upper() == "TRUE"):
                 entries[i][1] = "\033[3;34mIncome\033[0;0m"     # Give "Income" blue color
@@ -259,17 +282,21 @@ def Update_printEntries(row_header, entries):
                 entries[i][1] = "\033[3;33mExpense\033[0;0m"    # Give "Expense" yellow color
             
         for x in range(0, len(length)):
-            length[x] = int(length[x]) + 10
+            length[x] = int(length[x]) + 10                     # To add spaces infront of the strings
 
 
         income_length = int(length[1]) + 7 + 6       # Compensate for "\033[3;33m" and "\033[0;0m""
                                                             #     ^(len = 7)        ^((len = 6)
                                                             # \033 is 1 character
 
+
+
+
+        # Actual print function
         print("\t\t    ", row_header_format.format(*row_header, date_length = int(length[0]), income_length = int(length[1]), category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")      # * = all elements in the list
                                                                 # idk but \t == 8 spaces here
-        print("\t\t", "－" * int(sum(length) / 2 + 2), sep="")       # +2 because the spaces for print function above,  "\t    ". 
-                                                                                                                #      ^^^^ 
+        print("\t\t", "－" * int(sum(length) / 2 + 2), sep="")       # +2 because the spaces for print function above,  "\t\t    ". 
+                                                                                                                    #        ^^^^ 
                                                                       # "－" is full-width character, uses two half-width spaces
         for i in range(0, (len(entries))):
             if (i < 9):                                               # To make the (1) and (10) aligned in the table
@@ -289,23 +316,24 @@ def Update_printEntries(row_header, entries):
 
 def Update_getEntryNumber(entries_len):
     checkflag = False
-    entries_len += 1
 
     while(checkflag != True):
         try:    # type verification
-            FunctionIndentPrint("Enter the number of entry you would like to update.")
-            entry_number = int(input("\t>> "))
+            FunctionIndentPrint("Enter the number of entry you would like to update / delete.")
+            FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+            entry_number = input("\t>> ")
 
-            # the first two if and elif checks the entered number is between 0 and length of the entire list of entries
-            if (entries_len > int(entry_number) and int(entry_number) > 0):        
+            if (entry_number.upper() == "EXIT"):
+                main.main()   # return to main menu
+                              # again it's a bad practice but it works really well
+
+            elif (entries_len + 1 > int(entry_number) and int(entry_number) > 0):    #  checks the entered number is between 0 and length of the entire list of entries   
                 checkflag = True
-                return int(entry_number)                  
+                return int(entry_number)  
 
-            elif (entry_number.upper() == "EXIT"):
-                main.main()                                 # return to main menu
 
             else:
-                EmojiPrint("\t\t\033[0;31m:(\033[0;0m", "Invaild input. Cannot find the relevant record")
+                EmojiPrint("\t\t\033[0;31m:(\033[0;0m", "Invaild input. Cannot find the relevant record.")
                 checkflag = False
 
         except:
@@ -321,9 +349,10 @@ def Update_getIntentedHeader():
 
     while(checkflag != True):
         FunctionIndentLineBreakPrint("Enter the column you would like to update. \033[3;33m(Date, Income, Category, Name, Amount)\033[0;0m")
+        FunctionIndentPrint("You can also type '\033[3;31mD\033[0;0m' or '\033[3;31mDelete\033[0;0m' to remove an entry.")
         entry_column= str(input("\t>> "))
 
-        if (entry_column.upper() in ("DATE", "INCOME", "CATEGORY", "NAME", "AMOUNT")):
+        if (entry_column.upper() in ("DATE", "INCOME", "CATEGORY", "NAME", "AMOUNT", "D", "DELETE")):
             checkflag = True
             return entry_column.upper()
         
@@ -336,10 +365,10 @@ def Update_getIntentedHeader():
 
 
 def Update_processEntryColumn(entry_column):
-            # want use switch...
+            # want to use switch...
         if (entry_column == "DATE"):
             edit = Record_userInput_Date()
-            csv_index = 0   # index of {user inputed time} in data.csv
+            csv_index = 0                   # index of {user inputed date} in data.csv
             return [edit, csv_index]
 
         elif(entry_column == "INCOME"):
@@ -362,6 +391,14 @@ def Update_processEntryColumn(entry_column):
             csv_index = 4
             return [edit, csv_index]
 
+        elif(entry_column == "D" or entry_column == "DELETE"):
+            return False
+
+
+
+
+
+
 
 
 
@@ -369,19 +406,38 @@ def Update_processEntryColumn(entry_column):
 ########################################################################################################
 # View
 
-def View_getCurrentBalance(entries):
-    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
-    expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
+def View_getCurrentBalance(indent):
+    entries = csv_IO.CSV_retrieveEntireListOfEntries()
 
-    income_value_list = [float(column[4]) for column in income_entries]
+    income_entries = [row for row in entries if row[1].upper() == "TRUE"]       # Put the income entries in a list
+    expense_entries = [row for row in entries if row[1].upper() == "FALSE"]     # Same as above but expense
+
+    income_value_list = [float(column[4]) for column in income_entries]         # Put the value in income entries in a list
     expense_value_list = [float(column[4]) for column in expense_entries]
 
-    return (sum(income_value_list) - sum(expense_value_list))
-    # for x in range(len(income)):
-        
+    balance =  round(sum(income_value_list) - sum(expense_value_list), 1)           # avoid floating point error
 
 
+    # Give some color to balance
+    if (indent == True):        # Basically for View() only
+        if (balance > 0):
+            FunctionIndentLineBreakPrint(f"Current balance: \033[1;42m {balance} \033[0;0m\n")
 
+        elif (balance == 0):
+            FunctionIndentLineBreakPrint(f"Current balance: \033[1;43m {balance} \033[0;0m\n")
+
+        elif (balance < 0):
+            FunctionIndentLineBreakPrint(f"Current balance: \033[1;41m {balance} \033[0;0m\n")
+
+    else:
+        if (balance > 0):
+            IndentPrint(f"Current balance: \033[1;42m {balance} \033[0;0m\n")
+
+        elif (balance == 0):
+            IndentPrint(f"Current balance: \033[1;43m {balance} \033[0;0m\n")
+
+        elif (balance < 0):
+            IndentPrint(f"Current balance: \033[1;41m {balance} \033[0;0m\n")
 
 ########################################################################################################
 # Misc

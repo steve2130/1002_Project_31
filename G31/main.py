@@ -40,7 +40,6 @@ def Menu_selection(option):
                 Update()
 
             elif option == 3:
-
                 View()
 
             else:
@@ -118,40 +117,13 @@ def main_checkDataFileExistence():
 
 
 def Record():
-    entry = Record_userInput()
+    entry = user_IO.Record_userInput()
     csv_IO.CSV_writeToFile(entry)
     user_IO.EmojiPrint("\033[0;32m:)\033[0;0m", "\033[0;32mRecorded!\033[0;0m")
+    user_IO.View_getCurrentBalance(False)
 
 
 
-
-
-
-def Record_userInput():
-    """
-    Record user's inputs and store them in data.csv
-
-    Input: refer to {CSV_getDefaultColumnItems()} in csv_IO.py 
-    Output: a string that contains the record of user income/spending  
-    """
-    print(" ")
-    user_IO.FunctionIndentPrint("🡫 🡫 🡫")
-    user_IO.FunctionIndentLineBreakPrint("Record your income or spending here!")
-
-
-    date      = user_IO.Record_userInput_Date()
-    income    = user_IO.Record_userInput_Income()
-    category  = user_IO.Record_userInput_Category()
-    name      = user_IO.Record_userInput_Name()
-    amount    = user_IO.Record_userInput_Amount()
-
-    entry = f"{date},{income},{category},{name},{amount}"
-    
-    return entry
-
-
-
-    
 
 
 def Update():
@@ -171,11 +143,16 @@ def Update():
         entry_column = user_IO.Update_getIntentedHeader()
         edit_content = user_IO.Update_processEntryColumn(entry_column)      # [0] = content to be edited     [1] = index of the column in .csv
 
-        row_data[(len(row_data) - entry_number)][edit_content[1]] = str(edit_content[0])
-                    #  ^^^ Because the displayed list is reverse, we need to retrive the correct entry using this
 
-        # e.g. user select the the first entry from the list. Pick the corresponding column (cathgory) using {edit_content[1]}. Change its content to {edit_content[0]}
-        
+        if (edit_content == False):     # for deleteing entry
+            del row_data[(len(row_data) - entry_number)]
+
+        elif (type(edit_content) == list):
+            row_data[(len(row_data) - entry_number)][edit_content[1]] = str(edit_content[0])
+                        #  ^^^ Because the displayed list is reverse, we need to retrive the correct entry using this
+
+            # e.g. user select the the first entry from the list. Pick the corresponding column (cathgory) using {edit_content[1]}. Change its content to {edit_content[0]}
+            
 
 
 
@@ -191,18 +168,60 @@ def Update():
         csv_IO.CSV_overwriteToFile(row_string)
         # https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
 
-        user_IO.EmojiPrint("\n\t\033[0;32m:)\033[0;0m", "\033[2;32mUpdated!\033[0;0m\n")
+        user_IO.EmojiPrint("\n\t\033[0;32m:)", "Updated!\033[0;0m")
+        user_IO.View_getCurrentBalance(False)
 
 
 
 
 
 def View():
-        entries = csv_IO.CSV_retrieveEntireListOfEntries()
-        balance = user_IO.View_getCurrentBalance(entries)
-        
-        print(balance)
-        # Your current balance
+    user_IO.FunctionIndentPrint("")     # line break
+
+    view_options = {
+        1: "Balance",
+        2: "Yearly income",
+        3: "Top 3 spending in past 30 days"
+    }
+
+    user_IO.FunctionIndentPrint("\033[3;33;42mView your income / expense here!\033[0;0;0m\n")
+    for key in view_options.keys():
+        print("\t\t(", key, ") － ", view_options[key], sep = "")
+
+
+    # User input
+    try:        
+        option = int(input("\t>> "))
+
+
+        if  (option == 1):  # Balance
+            user_IO.View_getCurrentBalance(True)
+
+            
+
+
+
+
+        elif(option == 2):  # Yearly income
+            print("")
+
+        elif(option == 3):  # Top 3 spending in past 30 days
+            print("")
+
+        else:
+            user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
+
+
+
+    except:
+        user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
+
+
+
+
+    
+    
+    # Your current balance
         
 
 
