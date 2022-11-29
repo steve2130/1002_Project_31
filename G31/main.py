@@ -211,8 +211,6 @@ def View():
         else:
             user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
 
-
-
     except:
         user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
 

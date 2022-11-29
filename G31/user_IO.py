@@ -20,7 +20,7 @@ def Record_userInput():
     print(" ")
     FunctionIndentPrint("🡫 🡫 🡫")
     FunctionIndentLineBreakPrint("Record your income or spending here!")
-    FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+    FunctionIndentPrint("Or type '\033[3;34mexit\033[0;0m' and return to the main menu.")
 
 
     date      = Record_userInput_Date()
@@ -320,7 +320,7 @@ def Update_getEntryNumber(entries_len):
     while(checkflag != True):
         try:    # type verification
             FunctionIndentPrint("Enter the number of entry you would like to update / delete.")
-            FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+            FunctionIndentPrint("Or type '\033[3;34mexit\033[0;0m' and return to the main menu.")
             entry_number = input("\t>> ")
 
             if (entry_number.upper() == "EXIT"):
