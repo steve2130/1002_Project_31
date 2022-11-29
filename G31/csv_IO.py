@@ -20,8 +20,8 @@ def CSV_getDefaultColumnItems():
             #                     **Local time**
 
             # Income:             Boolean
-            #                     True if the record is cathgored as income
-            #                     False if the record is cathgored as expense  
+            #                     True if the record is categored as income
+            #                     False if the record is categored as expense  
 
             # Category:           String
             #                     Entered by user to describe their income / spending
