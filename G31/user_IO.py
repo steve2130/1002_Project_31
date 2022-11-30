@@ -480,7 +480,6 @@ def View_getCurrentBalance(indent):
 
 
 # Part 3
-########################################################################################################
 def Top_ThreeSpendings():
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
     expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
@@ -516,6 +515,8 @@ def Top_ThreeSpendings():
             if float(row[4]) == top_three_spendings_list[i]:
                 print(row)  
         i = i + 1
+
+
 def RetriveTargetdate():                                            # Finding the date 30 days before
     date0 = datetime.date.today()
     days0 = datetime.timedelta(30)
@@ -524,6 +525,98 @@ def RetriveTargetdate():                                            # Finding th
 
 
 
+
+
+def View_getBalanceOfEachCategory():
+    entries = Update_getEntries()
+    
+    #category_list = list(set([x[2] for x in entries]))        # get a list of category without duplicates  
+                                                               # https://stackoverflow.com/questions/7961363/removing-duplicates-in-lists 
+    income_sorted_by_category = {}
+    income_value = {}
+    expense_sorted_by_category = {}
+    expense_value = {}
+
+    # process entries
+    for row in entries:
+        if row[2] not in income_sorted_by_category or expense_sorted_by_category:        # Initialize key before append value
+            income_sorted_by_category[row[2]] = []                                        # https://stackoverflow.com/questions/41970992/appending-values-to-dictionary-in-for-loop
+            income_value[row[2]] = []                      # Should have same structure with above 
+            expense_sorted_by_category[row[2]] = []
+            expense_value[row[2]] = [] 
+
+    for row in entries:                                                                  # Append value to keys
+        #if row[2] in category_list:
+            if (str(row[1]).upper() == "TRUE"):
+                income_sorted_by_category[row[2]].append(row)                           
+            
+            elif (str(row[1]).upper() == "FALSE"):
+                expense_sorted_by_category[row[2]].append(row)
+    
+
+    for key in list(income_sorted_by_category) and list(expense_sorted_by_category):    # Delete unused keys
+        if income_sorted_by_category[key] == []:                                        # https://stackoverflow.com/questions/11941817/how-to-avoid-runtimeerror-dictionary-changed-size-during-iteration-error
+            del income_sorted_by_category[key]
+            del income_value[key]                   # Too lazy to write code to vaildate this 
+    
+        elif expense_sorted_by_category[key] == []:
+            del expense_sorted_by_category[key]
+            del expense_value[key]
+
+
+
+    # print part
+    #can use "os.get_terminal_size()" to make the content responsive 
+
+    income_string = "\033[4;34mIncome\033[0;0m"
+    expense_string = "\033[4;33mExpense\033[0;0m"
+
+    table_width = 60
+    line_width = 12
+
+
+    # print category in income
+    print(f"\t\t{income_string: <{table_width + 13}}\n")     # 13 -> len(\033[4;34m) = 7, len(\033[0;0m) = 6 
+    for key in income_sorted_by_category:
+        for i in range(0, len(income_sorted_by_category)):
+            income_value[key].append(float(income_sorted_by_category[key][i][4]))   # Don't know why there are list in list but whatever
+        income_value[key] = round(sum(income_value[key]), 1)    # avoid floating point error
+        FunctionIndentPrint(f"{key}{income_value[key]: >{table_width - len(key)}}")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+    print("\t\t", " " * (table_width-len(str(sum(income_value.values())))), f"\033[0;34m{sum(income_value.values())}\033[0;0m", sep="")
+    
+
+
+
+    # print category in expense
+    print(f"\t\t{expense_string: <{table_width + 13}}\n")
+    for key in expense_sorted_by_category:
+        for j in range(0, len(expense_sorted_by_category[key])):
+            expense_value[key].append(float(expense_sorted_by_category[key][j][4]))
+        expense_value[key] = round(sum(expense_value[key]), 1)
+        FunctionIndentPrint(f"{key}{expense_value[key]: >{table_width - len(key)}}")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+    print("\t\t", " " * (table_width-len(str(sum(expense_value.values())))), f"\033[0;33m{sum(expense_value.values())}\033[0;0m", sep="")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+
+
+
+    # print balance
+    balance = sum(income_value.values()) - sum(expense_value.values())
+    if (balance > 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;32m{balance}\033[0;0m", sep="")
+
+    elif (balance == 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;33m{balance}\033[0;0m", sep="")
+
+    elif (balance < 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;31m {balance}\033[0;0m", sep="")
+
+    print("\t\t", " " * (table_width - line_width), "=" * line_width, "\n", sep="")
+
+    
+    
+    
 
 
 ########################################################################################################

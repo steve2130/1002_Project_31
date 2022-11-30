@@ -179,9 +179,10 @@ def View():
     user_IO.FunctionIndentPrint("")     # line break
 
     view_options = {
-        1: "Balance",
+        1: "Overall balance",
         2: "Yearly income",
-        3: "Top 3 spending in past 30 days"
+        3: "Top 3 spending in past 30 days",
+        4: "Balance of each category"
     }
 
     user_IO.FunctionIndentPrint("\033[3;33;42mView your income / expense here!\033[0;0;0m\n")
@@ -202,6 +203,9 @@ def View():
 
         elif(option == 3):  # Top 3 spending in past 30 days
             user_IO.Top_ThreeSpendings()
+
+        elif(option == 4):
+            user_IO.View_getBalanceOfEachCategory()
 
         else:
             user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
