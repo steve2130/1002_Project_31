@@ -4,7 +4,7 @@
 
 import main
 import csv_IO as csv_IO
-
+import datetime
 
 
 
@@ -403,7 +403,7 @@ def Update_processEntryColumn(entry_column):
     elif (entry_column == "INCOME"):
         edit = Record_userInput_Income()
         csv_index = 1
-        return [edit, csv_index]
+        return [str(edit).upper, csv_index]
 
     elif (entry_column == "CATEGORY"):
         edit = Record_userInput_Category()
@@ -474,6 +474,57 @@ def View_getCurrentBalance(indent):
 
         elif (balance < 0):
             IndentPrint(f"Current balance: \033[1;41m {balance} \033[0;0m\n")
+
+
+
+
+
+# Part 3
+########################################################################################################
+def Top_ThreeSpendings():
+    entries = csv_IO.CSV_retrieveEntireListOfEntries()
+    expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
+    sorted_expense_entries = []
+    dateT = RetriveTargetdate()
+    # Filitering rows of last 30 days
+    for row in expense_entries:
+        date0 = row[0].split("-")
+        date0 = datetime.date(int(date0[0]),int(date0[1]),int(date0[2]))
+        Edge = False
+        i = 0
+        if date0 > dateT :
+            if sorted_expense_entries != []:                        # Sorting for better presention.
+                while not Edge :
+                    if row[0] < sorted_expense_entries[i][0]:
+                        sorted_expense_entries.insert(i, row)
+                        Edge = True
+                    else:
+                        if i == (len(sorted_expense_entries) - 1):    
+                            sorted_expense_entries.append(row)
+                            Edge = True
+                        else:
+                            i = i + 1
+            else:
+                sorted_expense_entries.append(row)
+    # Selecting the top 3 spendings
+    expense_value_list = [float(column[4]) for column in expense_entries]
+    sorted_expense_value_list = sorted(expense_value_list, reverse = True)
+    top_three_spendings_list = [sorted_expense_value_list[0],sorted_expense_value_list[1],sorted_expense_value_list[2]]
+    i = 0
+    while i < 3:
+        for row in sorted_expense_entries:
+            if float(row[4]) == top_three_spendings_list[i]:
+                print(row)  
+        i = i + 1
+def RetriveTargetdate():                                            # Finding the date 30 days before
+    date0 = datetime.datetime.today()
+    days0 = datetime.timedelta(30)
+    Target_date = date0 - days0
+    return Target_date
+
+
+
+
 
 ########################################################################################################
 # Misc
