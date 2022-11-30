@@ -403,7 +403,7 @@ def Update_processEntryColumn(entry_column):
     elif (entry_column == "INCOME"):
         edit = Record_userInput_Income()
         csv_index = 1
-        return [str(edit).upper, csv_index]
+        return [str(edit), csv_index]
 
     elif (entry_column == "CATEGORY"):
         edit = Record_userInput_Category()
