@@ -6,8 +6,6 @@ import main
 import csv_IO as csv_IO
 import datetime
 
-
-
 # Record()
 ########################################################################################################
 def Record_userInput():
