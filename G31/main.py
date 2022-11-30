@@ -197,37 +197,17 @@ def View():
         if  (option == 1):  # Balance
             user_IO.View_getCurrentBalance(True)
 
-            
-
-
-
-
         elif(option == 2):  # Yearly income
             print("")
 
         elif(option == 3):  # Top 3 spending in past 30 days
-            print("")
+            user_IO.Top_ThreeSpendings()
 
         else:
             user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
 
     except:
         user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")
-
-
-
-
-    
-    
-    # Your current balance
-        
-
-
-
-
-
-
-
 
 
 
