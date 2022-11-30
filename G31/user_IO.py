@@ -517,7 +517,7 @@ def Top_ThreeSpendings():
                 print(row)  
         i = i + 1
 def RetriveTargetdate():                                            # Finding the date 30 days before
-    date0 = datetime.datetime.today()
+    date0 = datetime.date.today()
     days0 = datetime.timedelta(30)
     Target_date = date0 - days0
     return Target_date
