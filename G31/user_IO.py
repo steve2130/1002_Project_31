@@ -1,6 +1,6 @@
 # user_IO
-# Tommy
-# My brain hurts...
+# This file contains sub-function of the three major function: Record(), Update(), and View()
+# The purpose of this file is to record user's input, process them, and return the result back to main.py
 
 import main
 import csv_IO as csv_IO
@@ -20,7 +20,7 @@ def Record_userInput():
     print(" ")
     FunctionIndentPrint("🡫 🡫 🡫")
     FunctionIndentLineBreakPrint("Record your income or spending here!")
-    FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+    FunctionIndentPrint("Or type '\033[3;34mexit\033[0;0m' and return to the main menu.")
 
 
     date      = Record_userInput_Date()
@@ -315,17 +315,21 @@ def Update_printEntries(row_header, entries):
 
 
 def Update_getEntryNumber(entries_len):
+    """
+    
+    """
+
     checkflag = False
 
     while(checkflag != True):
         try:    # type verification
             FunctionIndentPrint("Enter the number of entry you would like to update / delete.")
-            FunctionIndentPrint("Or type 'exit' and return to the main menu.")
+            FunctionIndentPrint("Or type '\033[3;34mexit\033[0;0m' and return to the main menu.")
             entry_number = input("\t>> ")
 
             if (entry_number.upper() == "EXIT"):
                 main.main()   # return to main menu
-                              # again it's a bad practice but it works really well
+                              # again, it's a bad practice but it works really well
 
             elif (entries_len + 1 > int(entry_number) and int(entry_number) > 0):    #  checks the entered number is between 0 and length of the entire list of entries   
                 checkflag = True
@@ -345,6 +349,14 @@ def Update_getEntryNumber(entries_len):
 
 
 def Update_getIntentedHeader():
+    """
+    To get which column the user want to edit.
+    Or to get user's instruction to delete an entry
+
+    Input: entry_column (string) -> A string that user entered that consists the name of column, or "D" and "Delete"
+    Output: The name of the column or "d" and "delete" in capital letter
+    """
+
     checkflag = False
 
     while(checkflag != True):
@@ -365,34 +377,51 @@ def Update_getIntentedHeader():
 
 
 def Update_processEntryColumn(entry_column):
-            # want to use switch...
-        if (entry_column == "DATE"):
-            edit = Record_userInput_Date()
-            csv_index = 0                   # index of {user inputed date} in data.csv
-            return [edit, csv_index]
+    """
+    Get the content that user want to edit via the related sub-function in Record()
+    Then return the result back to Update()
 
-        elif(entry_column == "INCOME"):
-            edit = Record_userInput_Income()
-            csv_index = 1
-            return [edit, csv_index]
+    Or delete entry that the user entered in Update_getEntryNumber()
 
-        elif(entry_column == "CATEGORY"):
-            edit = Record_userInput_Category()
-            csv_index = 2
-            return [edit, csv_index]
+    Input: entry_column (string) -> Determind which column user want to edit or the row user want to delete
+    Output: 
+            either:
+                    [edit, csv_index]     
+                            edit (string) -> The content that user entered to edit the entry with
+                            csv_index (int) -> A number that corresponds to the index of the selected column in the list of entries
 
-        elif(entry_column == "NAME"):
-            edit = Record_userInput_Name()
-            csv_index = 3
-            return [edit, csv_index]
+                    False (boolean) -> Just a value that isn't list. Return "False" if the user decide to delete the row of entry  
+    """
 
-        elif(entry_column == "AMOUNT"):
-            edit = Record_userInput_Amount()
-            csv_index = 4
-            return [edit, csv_index]
 
-        elif(entry_column == "D" or entry_column == "DELETE"):
-            return False
+    # want to use switch...
+    if (entry_column == "DATE"):
+        edit = Record_userInput_Date()
+        csv_index = 0                   # index of {user inputed date} in data.csv
+        return [edit, csv_index]
+
+    elif (entry_column == "INCOME"):
+        edit = Record_userInput_Income()
+        csv_index = 1
+        return [edit, csv_index]
+
+    elif (entry_column == "CATEGORY"):
+        edit = Record_userInput_Category()
+        csv_index = 2
+        return [edit, csv_index]
+
+    elif (entry_column == "NAME"):
+        edit = Record_userInput_Name()
+        csv_index = 3
+        return [edit, csv_index]
+
+    elif (entry_column == "AMOUNT"):
+        edit = Record_userInput_Amount()
+        csv_index = 4
+        return [str(edit), csv_index]
+
+    elif (entry_column == "D" or entry_column == "DELETE"):
+        return False
 
 
 
@@ -407,6 +436,13 @@ def Update_processEntryColumn(entry_column):
 # View
 
 def View_getCurrentBalance(indent):
+    """
+    Calculate the overall balance with all records in data.csv
+
+    input: indent (boolean) -> Print the result with indentation if {indent} == True
+    output: -  
+    """
+
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
 
     income_entries = [row for row in entries if row[1].upper() == "TRUE"]       # Put the income entries in a list
@@ -415,11 +451,11 @@ def View_getCurrentBalance(indent):
     income_value_list = [float(column[4]) for column in income_entries]         # Put the value in income entries in a list
     expense_value_list = [float(column[4]) for column in expense_entries]
 
-    balance =  round(sum(income_value_list) - sum(expense_value_list), 1)           # avoid floating point error
+    balance =  round(sum(income_value_list) - sum(expense_value_list), 1)       # avoid floating point error
 
 
     # Give some color to balance
-    if (indent == True):        # Basically for View() only
+    if (indent == True):        # Have indentation, basically for View() only
         if (balance > 0):
             FunctionIndentLineBreakPrint(f"Current balance: \033[1;42m {balance} \033[0;0m\n")
 
