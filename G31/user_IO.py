@@ -605,6 +605,9 @@ def RetriveTargetdate(days_numbers):                                            
 
 # Part 4
 def View_getBalanceOfEachCategory():
+    # Monthly Balance (code that scraped but I think it's kinda cool)
+    # https://pastebin.com/HAU6kJXV 
+
     """
     To print the sum of each category and the overall balance in format of financial statement
 
@@ -661,7 +664,7 @@ def View_getBalanceOfEachCategory():
 
 
     # print category in income
-    print(f"\t\t{income_string: <{table_width + 13}}\n")     # 13 -> len(\033[4;34m) = 7, len(\033[0;0m) = 6 
+    print(f"\n\t\t{income_string: <{table_width + 13}}\n")     # 13 -> len(\033[4;34m) = 7, len(\033[0;0m) = 6 
     for key in income_sorted_by_category:
         for i in range(0, len(income_sorted_by_category)):
             income_value[key].append(float(income_sorted_by_category[key][i][4]))   # Don't know why there are list in list but whatever
