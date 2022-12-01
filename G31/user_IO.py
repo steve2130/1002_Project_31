@@ -36,6 +36,14 @@ def Record_userInput():
 
 
 def Record_userInput_Date():
+    """
+    To get the date of the entry 
+
+    Input: - 
+    Output: {date} (string) (in "YYYY-MM-DD" form) -> The date when the event listed in entry occured
+    """
+
+
     checkflag_date = False
 
     while(checkflag_date == False):
@@ -80,6 +88,13 @@ def Record_userInput_Date():
 
 
 def Record_userInput_Income():
+    """
+    To decide whether the entry is income or expense
+
+    Input: - 
+    Output:  (boolean) -> True = "income", False = "expense"
+    """
+
     checkflag_income = False
 
     while(checkflag_income == False):       # loop if the user mis-input something like int or bool here
@@ -111,6 +126,13 @@ def Record_userInput_Income():
 
 
 def Record_userInput_Category():
+    """
+    To get  the category of entry
+
+    Input: - 
+    Output: {category} (string) -> The category of the entry
+    """
+
     checkflag_category = False
 
     while(checkflag_category == False):
@@ -165,6 +187,12 @@ def Record_userInput_Category():
 
 
 def Record_userInput_Name():
+    """
+    To get the name of entry after user entered the category of entry
+
+    Input: - 
+    Output: {name} (string) -> The name of the entry
+    """
     checkflag_name = False
 
     while(checkflag_name == False):
@@ -194,6 +222,13 @@ def Record_userInput_Name():
 
 
 def Record_userInput_Amount():
+    """
+    To get the value that user get / spend with their money
+
+    Input: - 
+    Output: {amount} (float) -> The amount that the user get from / spend on 
+    """
+
     checkflag_amount = False
 
     while(checkflag_amount == False):
@@ -231,6 +266,13 @@ def Record_userInput_Amount():
 # Update()
 
 def Update_getColumnHeader():
+    """
+    To get the a list of column header in data.csv
+
+    Input: {column_header} (string) -> A string containing all column headers
+    Output : {column_header} (list)  -> A list containing column headers. {User Entered Date} is replaced with {Date}
+    """
+
     column_header = csv_IO.CSV_getDefaultColumnItems()
     column_header = column_header.split(",")
     column_header[0] = "Date"      # Replace "User Entered Date" with "Date"
@@ -241,6 +283,12 @@ def Update_getColumnHeader():
 
 
 def Update_getEntries():            # if input {row_data} here, python will also change the content of {row_data}
+    """
+    To convert data retrieve from data.csv to a list that without column header and in reverse order.
+
+    Input: {entries} (list) -> A list of entries retrieved from data.csv
+    Output: {} (list)       -> A list that without column header and in reverse order
+    """
     entries = csv_IO.CSV_retrieveEntireListOfEntries()  
     if (entries != []):
         del entries[0]                        # delete header
@@ -254,59 +302,72 @@ def Update_getEntries():            # if input {row_data} here, python will also
 
 
 def Update_printEntries(row_header, entries):
-        # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
-        # Good luck on maintaining it
+    """
+    To print a table of entries in reverse order.
+    User can therefore choose easily which entry they want to edit / delete.
 
-        row_header_format = "\033[1;36m{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}\033[0;0m"      # {:>20} -> each header takes 20 spaces.  And cyan color.
-        entries_format = "{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}"     # * by How many column
+
+    Input: {row_header} (list) -> A list containing strings of header in the list (i.e. "User Entered Date,Income,Category,Name,Amount")
+           {entires} (list)    -> A list containing entries that without header and is in reverse order
+
+    Output: -
+    """
+
+
+
+    # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
+    # Good luck on maintaining it
+
+    row_header_format = "\033[1;36m{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}\033[0;0m"      # {:>20} -> each header takes 20 spaces.  And cyan color.
+    entries_format = "{:>{date_length}}{:>{income_length}}{:>{category_length}}{:>{name_length}}{:>{amount_length}}"     # * by How many column
+    
+    
+    length = []                                     # To get the length of each column
+    for j in range(0, len(entries[0])):
+        length.append(len(entries[0][j]))           # Get the length of column in the first row
+
+    for i in range(0, len(entries) - 1):
+        for k in range(0, len(entries[i])):
+            if (len(entries[i][k]) > length[k]):
+                length[k] = len(entries[i][k])      # Compare the length of column with other rows
+
+
+
+    for i in range(0, (len(entries))):                      # Replace "True" & "False" in Income column with "Income" and "Expense"
+        if (entries[i][1].upper() == "TRUE"):
+            entries[i][1] = "\033[3;34mIncome\033[0;0m"     # Give "Income" blue color
         
+        elif (entries[i][1].upper() == "FALSE"):
+            entries[i][1] = "\033[3;33mExpense\033[0;0m"    # Give "Expense" yellow color
         
-        length = []                                     # To get the length of each column
-        for j in range(0, len(entries[0])):
-            length.append(len(entries[0][j]))           # Get the length of column in the first row
-
-        for i in range(0, len(entries) - 1):
-            for k in range(0, len(entries[i])):
-                if (len(entries[i][k]) > length[k]):
-                    length[k] = len(entries[i][k])      # Compare the length of column with other rows
+    for x in range(0, len(length)):
+        length[x] = int(length[x]) + 10                     # To add spaces infront of the strings
 
 
-
-        for i in range(0, (len(entries))):                      # Replace "True" & "False" in Income column with "Income" and "Expense"
-            if (entries[i][1].upper() == "TRUE"):
-                entries[i][1] = "\033[3;34mIncome\033[0;0m"     # Give "Income" blue color
-            
-            elif (entries[i][1].upper() == "FALSE"):
-                entries[i][1] = "\033[3;33mExpense\033[0;0m"    # Give "Expense" yellow color
-            
-        for x in range(0, len(length)):
-            length[x] = int(length[x]) + 10                     # To add spaces infront of the strings
-
-
-        income_length = int(length[1]) + 7 + 6       # Compensate for "\033[3;33m" and "\033[0;0m""
-                                                            #     ^(len = 7)        ^((len = 6)
-                                                            # \033 is 1 character
+    income_length = int(length[1]) + 7 + 6       # Compensate for "\033[3;33m" and "\033[0;0m""
+                                                        #     ^(len = 7)        ^((len = 6)
+                                                        # \033 is 1 character
 
 
 
 
-        # Actual print function
-        print("\t\t    ", row_header_format.format(*row_header, date_length = int(length[0]), income_length = int(length[1]), category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")      # * = all elements in the list
-                                                                # idk but \t == 8 spaces here
-        print("\t\t", "－" * int(sum(length) / 2 + 2), sep="")       # +2 because the spaces for print function above,  "\t\t    ". 
-                                                                                                                    #        ^^^^ 
-                                                                      # "－" is full-width character, uses two half-width spaces
-        for i in range(0, (len(entries))):
-            if (i < 9):                                               # To make the (1) and (10) aligned in the table
-                print(f"\t\t({i + 1}) ", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        # Will be a mess if user entered a long string for category or name
+    # Actual print function
+    print("\t\t    ", row_header_format.format(*row_header, date_length = int(length[0]), income_length = int(length[1]), category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")      # * = all elements in the list
+                                                            # idk but \t == 8 spaces here
+    print("\t\t", "－" * int(sum(length) / 2 + 2), sep="")       # +2 because the spaces for print function above,  "\t\t    ". 
+                                                                                                                #        ^^^^ 
+                                                                    # "－" is full-width character, uses two half-width spaces
+    for i in range(0, (len(entries))):
+        if (i < 9):                                               # To make the (1) and (10) aligned in the table
+            print(f"\t\t({i + 1}) ", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        # Will be a mess if user entered a long string for category or name
 
-            else:
-                if (i % 10 == 0):
-                    print("\t\t", "＝" * int(sum(length) / 2 + 2), sep="")
-                    
-                print(f"\t\t({i + 1})", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        
+        else:
+            if (i % 10 == 0):
+                print("\t\t", "＝" * int(sum(length) / 2 + 2), sep="")
+                
+            print(f"\t\t({i + 1})", entries_format.format(*entries[i], date_length = int(length[0]), income_length = income_length, category_length = int(length[2]), name_length = int(length[3]), amount_length = int(length[4])), sep="")        
 
-        print("\t\t", "－" * int(sum(length) / 2 + 2), "\n", sep="")
+    print("\t\t", "－" * int(sum(length) / 2 + 2), "\n", sep="")
 
 
 
@@ -314,8 +375,16 @@ def Update_printEntries(row_header, entries):
 
 def Update_getEntryNumber(entries_len):
     """
-    
-    """
+    To get the number of entry which user want to edit.
+    Note that the number is corresponding to the table displayed on the console. Not the index of entries list.
+    User can also type "exit" to leave to leave Update()
+
+    Input: {entries_len} (int) -> Provide a restriction and stop user from entering a number that exceed the number of entries in list. 
+
+    Output: {entry_number} (int) / (str) -> A number that is (1 - {index of the entry in list of entries without header})
+                                        -> A string which indicates user want to exit this function.
+
+    """ 
 
     checkflag = False
 
@@ -478,8 +547,13 @@ def View_getCurrentBalance(indent):
 
 
 # Part 3
-########################################################################################################
 def Top_ThreeSpendings():
+    """
+    Printing the top three spendings in the last 30 days
+
+    input: -
+    output: -
+    """
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
     expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
     sorted_expense_entries = []
@@ -504,16 +578,26 @@ def Top_ThreeSpendings():
                             i = i + 1
             else:
                 sorted_expense_entries.append(row)
-    # Selecting the top 3 spendings
+    # Selecting the top 3 spendings / and adding suplmentary value in case not enought expense to print
     expense_value_list = [float(column[4]) for column in expense_entries]
     sorted_expense_value_list = sorted(expense_value_list, reverse = True)
+    empty_row = ["XXXX-XX-XX",False,"---","---","---"]
+    while (len(sorted_expense_value_list)<3):
+            sorted_expense_value_list.append(empty_row[4])
     top_three_spendings_list = [sorted_expense_value_list[0],sorted_expense_value_list[1],sorted_expense_value_list[2]]
     i = 0
     while i < 3:
-        for row in sorted_expense_entries:
-            if float(row[4]) == top_three_spendings_list[i]:
-                print(row)  
+        if top_three_spendings_list[i] == "---":
+            print(empty_row)
+        else: 
+            for row in sorted_expense_entries:
+                if top_three_spendings_list[i] == "---":
+                    print(empty_row)
+                elif (float(row[4]) == top_three_spendings_list[i]):
+                    print(row)  
         i = i + 1
+
+
 def RetriveTargetdate():                                            # Finding the date 30 days before
     date0 = datetime.date.today()
     days0 = datetime.timedelta(30)
@@ -522,6 +606,106 @@ def RetriveTargetdate():                                            # Finding th
 
 
 
+
+
+def View_getBalanceOfEachCategory():
+    """
+    To print the sum of each category and the overall balance in format of financial statement
+
+    Input: {entries} (list) -> A list from data.csv that removed the column headers and in reverse order
+    Output: -
+
+    """
+
+    entries = Update_getEntries()
+    
+    #category_list = list(set([x[2] for x in entries]))        # get a list of category without duplicates  
+                                                               # https://stackoverflow.com/questions/7961363/removing-duplicates-in-lists 
+    income_sorted_by_category = {}
+    income_value = {}
+    expense_sorted_by_category = {}
+    expense_value = {}
+
+    # process entries
+    for row in entries:
+        if row[2] not in income_sorted_by_category or expense_sorted_by_category:        # Initialize key before append value
+            income_sorted_by_category[row[2]] = []                                        # https://stackoverflow.com/questions/41970992/appending-values-to-dictionary-in-for-loop
+            income_value[row[2]] = []                      # Should have same structure with above 
+            expense_sorted_by_category[row[2]] = []
+            expense_value[row[2]] = [] 
+
+    for row in entries:                                                                  # Append value to keys
+        #if row[2] in category_list:
+            if (str(row[1]).upper() == "TRUE"):
+                income_sorted_by_category[row[2]].append(row)                           
+            
+            elif (str(row[1]).upper() == "FALSE"):
+                expense_sorted_by_category[row[2]].append(row)
+    
+
+    for key in list(income_sorted_by_category) and list(expense_sorted_by_category):    # Delete unused keys
+        if income_sorted_by_category[key] == []:                                        # https://stackoverflow.com/questions/11941817/how-to-avoid-runtimeerror-dictionary-changed-size-during-iteration-error
+            del income_sorted_by_category[key]
+            del income_value[key]                   # Too lazy to write code to vaildate this 
+    
+        elif expense_sorted_by_category[key] == []:
+            del expense_sorted_by_category[key]
+            del expense_value[key]
+
+
+
+    # print part
+    #can use "os.get_terminal_size()" to make the content responsive 
+
+    income_string = "\033[4;34mIncome\033[0;0m"
+    expense_string = "\033[4;33mExpense\033[0;0m"
+
+    table_width = 60
+    line_width = 12
+
+
+    # print category in income
+    print(f"\t\t{income_string: <{table_width + 13}}\n")     # 13 -> len(\033[4;34m) = 7, len(\033[0;0m) = 6 
+    for key in income_sorted_by_category:
+        for i in range(0, len(income_sorted_by_category)):
+            income_value[key].append(float(income_sorted_by_category[key][i][4]))   # Don't know why there are list in list but whatever
+        income_value[key] = round(sum(income_value[key]), 1)    # avoid floating point error
+        FunctionIndentPrint(f"{key}{income_value[key]: >{table_width - len(key)}}")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+    print("\t\t", " " * (table_width-len(str(sum(income_value.values())))), f"\033[0;34m{sum(income_value.values())}\033[0;0m", sep="")
+    
+
+
+
+    # print category in expense
+    print(f"\t\t{expense_string: <{table_width + 13}}\n")
+    for key in expense_sorted_by_category:
+        for j in range(0, len(expense_sorted_by_category[key])):
+            expense_value[key].append(float(expense_sorted_by_category[key][j][4]))
+        expense_value[key] = round(sum(expense_value[key]), 1)
+        FunctionIndentPrint(f"{key}{expense_value[key]: >{table_width - len(key)}}")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+    print("\t\t", " " * (table_width-len(str(sum(expense_value.values())))), f"\033[0;33m{sum(expense_value.values())}\033[0;0m", sep="")
+    print("\t\t", " " * (table_width - line_width), "-" * line_width, sep="")
+
+
+
+    # print balance
+    balance = sum(income_value.values()) - sum(expense_value.values())
+    if (balance > 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;32m{balance}\033[0;0m", sep="")
+
+    elif (balance == 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;33m{balance}\033[0;0m", sep="")
+
+    elif (balance < 0):
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;31m{balance}\033[0;0m", sep="")
+
+    print("\t\t", " " * (table_width - line_width), "=" * line_width, "\n", sep="")
+
+    
+    
+    
 
 
 ########################################################################################################

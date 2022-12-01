@@ -1,5 +1,5 @@
 User Entered Date,Income,Category,Name,Amount
-2021-12-01,TRUE,Salary,HAS,14,500.0
+2021-12-01,TRUE,Salary,HAS,14500.0
 2021-12-02,FALSE,Traffic,Bus(N29),21.0
 2021-12-02,FALSE,Breakfast,Cathay House - Maxim,39.0
 2021-12-02,FALSE,Traffic,Bus(S1),3.5
@@ -37,7 +37,7 @@ User Entered Date,Income,Category,Name,Amount
 2022-10-21,FALSE,Fee,Birdie,50.0
 2022-10-21,FALSE,Traffic,MTR,1.9
 2022-10-21,FALSE,Traffic,Bus(215X),8.0
-2022-10-21,FALSE,Fee,Motocycle lesson,3,410.0
+2022-10-21,FALSE,Fee,Motocycle lesson,3410.0
 2022-10-21,FALSE,Dinner,Sukiya,49.0
 2022-10-21,FALSE,Traffic,MTR,1.9
 2022-10-22,FALSE,Traffic,MTR,1.9
