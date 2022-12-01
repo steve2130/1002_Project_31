@@ -687,7 +687,7 @@ def View_getBalanceOfEachCategory():
         print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;33m{balance}\033[0;0m", sep="")
 
     elif (balance < 0):
-        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;31m {balance}\033[0;0m", sep="")
+        print("\t\t", " " * (table_width - len(str(balance))), f"\033[1;31m{balance}\033[0;0m", sep="")
 
     print("\t\t", " " * (table_width - line_width), "=" * line_width, "\n", sep="")
 
