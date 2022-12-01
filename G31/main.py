@@ -61,8 +61,8 @@ def Menu_printOptions():
     user_IO.IndentPrint("－－－－－－－－－－－－－－－－－－－－－")
     menu_options = {
         1: "Record",
-        2: "Update",
-        3: "View"
+        2: "View & Update",
+        3: "Functions"
     }
 
     for key in menu_options.keys():
