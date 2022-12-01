@@ -341,7 +341,7 @@ def Update_printEntries(row_header, entries):
             entries[i][1] = "\033[3;33mExpense\033[0;0m"    # Give "Expense" yellow color
         
     for x in range(0, len(length)):
-        length[x] = int(length[x]) + 10                     # To add spaces infront of the strings
+        length[x] = int(length[x]) + 6                     # To add spaces infront of the strings
 
 
     income_length = int(length[1]) + 7 + 6       # Compensate for "\033[3;33m" and "\033[0;0m""
