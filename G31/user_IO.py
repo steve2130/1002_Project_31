@@ -591,6 +591,7 @@ def Top_ThreeSpendings(days_numbers):
         entries_to_print.append(expense_entries_in_30_days[i])
 
     column_header = Update_getColumnHeader()
+    print("")   # line break 
     Update_printEntries(column_header , entries_to_print)
 
 def RetriveTargetdate(days_numbers):                                            # Finding the date 30 days before
@@ -599,6 +600,10 @@ def RetriveTargetdate(days_numbers):                                            
     Target_date = date0 - days_numbers
     return Target_date
 
+
+
+
+# Part 4
 def View_getBalanceOfEachCategory():
     """
     To print the sum of each category and the overall balance in format of financial statement
