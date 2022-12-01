@@ -199,7 +199,7 @@ def View():
             user_IO.View_getCurrentBalance(True)
 
         elif(option == 2):  # Yearly income
-            user_I0.yearly_income()
+            user_IO.yearly_income()
 
         elif(option == 3):  # Top 3 spending in past 30 days
             user_IO.Top_ThreeSpendings()
