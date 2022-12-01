@@ -182,7 +182,8 @@ def View():
         1: "Overall balance",
         2: "Yearly income",
         3: "Top 3 spending in past 30 days",
-        4: "Balance of each category"
+        4: "Balance of each category",
+        5: "Records of each category"
     }
 
     user_IO.FunctionIndentPrint("\033[3;33;42mView your income / expense here!\033[0;0;0m\n")
@@ -206,6 +207,9 @@ def View():
 
         elif(option == 4):
             user_IO.View_getBalanceOfEachCategory()
+
+        elif(option == 5):
+            user_IO.View_printCategoryRecords()
 
         else:
             user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "I am not quite sure that you've entered the correct option...")

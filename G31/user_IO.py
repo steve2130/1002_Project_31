@@ -616,42 +616,11 @@ def View_getBalanceOfEachCategory():
 
     """
 
-    entries = Update_getEntries()
-    
-    #category_list = list(set([x[2] for x in entries]))        # get a list of category without duplicates  
-                                                               # https://stackoverflow.com/questions/7961363/removing-duplicates-in-lists 
-    income_sorted_by_category = {}
-    income_value = {}
-    expense_sorted_by_category = {}
-    expense_value = {}
-
-    # process entries
-    for row in entries:
-        if row[2] not in income_sorted_by_category or expense_sorted_by_category:        # Initialize key before append value
-            income_sorted_by_category[row[2]] = []                                        # https://stackoverflow.com/questions/41970992/appending-values-to-dictionary-in-for-loop
-            income_value[row[2]] = []                      # Should have same structure with above 
-            expense_sorted_by_category[row[2]] = []
-            expense_value[row[2]] = [] 
-
-    for row in entries:                                                                  # Append value to keys
-        #if row[2] in category_list:
-            if (str(row[1]).upper() == "TRUE"):
-                income_sorted_by_category[row[2]].append(row)                           
-            
-            elif (str(row[1]).upper() == "FALSE"):
-                expense_sorted_by_category[row[2]].append(row)
-    
-
-    for key in list(income_sorted_by_category) and list(expense_sorted_by_category):    # Delete unused keys
-        if income_sorted_by_category[key] == []:                                        # https://stackoverflow.com/questions/11941817/how-to-avoid-runtimeerror-dictionary-changed-size-during-iteration-error
-            del income_sorted_by_category[key]
-            del income_value[key]                   # Too lazy to write code to vaildate this 
-    
-        elif expense_sorted_by_category[key] == []:
-            del expense_sorted_by_category[key]
-            del expense_value[key]
-
-
+    list_1 =  View_getSortedCategoryList()
+    income_sorted_by_category = list_1[0]
+    income_value = list_1[1]
+    expense_sorted_by_category = list_1[2]
+    expense_value = list_1[3]
 
     # print part
     #can use "os.get_terminal_size()" to make the content responsive 
@@ -704,8 +673,86 @@ def View_getBalanceOfEachCategory():
 
     
     
+
+
+def View_getSortedCategoryList():
+
+    """
+    To print the sum of each category and the overall balance in format of financial statement
+
+    Input: {entries} (list) -> A list from data.csv that removed the column headers and in reverse order
+    Output: -
+
+    """
+
+    entries = Update_getEntries()
+    
+    category_list = list(set([x[2] for x in entries]))        # get a list of category without duplicates  
+                                                               # https://stackoverflow.com/questions/7961363/removing-duplicates-in-lists 
+    income_sorted_by_category = {}
+    income_value = {}
+    expense_sorted_by_category = {}
+    expense_value = {}
+
+    # process entries
+    for row in entries:
+        if row[2] not in income_sorted_by_category or expense_sorted_by_category:        # Initialize key before append value
+            income_sorted_by_category[row[2]] = []                                        # https://stackoverflow.com/questions/41970992/appending-values-to-dictionary-in-for-loop
+            income_value[row[2]] = []                      # Should have same structure with above 
+            expense_sorted_by_category[row[2]] = []
+            expense_value[row[2]] = [] 
+
+    for row in entries:                                                                  # Append value to keys
+        #if row[2] in category_list:
+            if (str(row[1]).upper() == "TRUE"):
+                income_sorted_by_category[row[2]].append(row)                           
+            
+            elif (str(row[1]).upper() == "FALSE"):
+                expense_sorted_by_category[row[2]].append(row)
     
 
+    for key in list(income_sorted_by_category) and list(expense_sorted_by_category):    # Delete unused keys
+        if income_sorted_by_category[key] == []:                                        # https://stackoverflow.com/questions/11941817/how-to-avoid-runtimeerror-dictionary-changed-size-during-iteration-error
+            del income_sorted_by_category[key]
+            del income_value[key]                   # Too lazy to write code to vaildate this 
+    
+        elif expense_sorted_by_category[key] == []:
+            del expense_sorted_by_category[key]
+            del expense_value[key]
+
+
+    return [income_sorted_by_category, income_value, expense_sorted_by_category, expense_value, category_list]
+
+    
+
+
+
+def View_printCategoryRecords():
+    list_1 =  View_getSortedCategoryList()
+
+    income_sorted_by_category = list_1[0]
+    expense_sorted_by_category = list_1[2]
+    category_list = list_1[4]
+
+    list_of_that_category = []
+
+    FunctionIndentLineBreakPrint("Please enter the category you would like to view.")
+    FunctionIndentPrint(f"\033[3;33m({(', '.join(sorted(category_list)))})\033[0;0m")
+    category = input("\t>> ")
+
+    for key in income_sorted_by_category:
+        if (key.upper() == category.upper()):
+            for i in range(0, len(income_sorted_by_category[key])):
+                list_of_that_category.append(income_sorted_by_category[key][i])
+
+    for key in expense_sorted_by_category:
+        if (key.upper() == category.upper()):
+            for i in range(0, len(expense_sorted_by_category[key])):
+                list_of_that_category.append(expense_sorted_by_category[key][i])
+
+    column_header = Update_getColumnHeader()
+    print("")   # line break 
+    Update_printEntries(column_header , list_of_that_category)
 
 ########################################################################################################
 # Misc
