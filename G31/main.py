@@ -202,7 +202,7 @@ def View():
             print("")
 
         elif(option == 3):  # Top 3 spending in past 30 days
-            user_IO.Top_ThreeSpendings()
+            user_IO.Top_ThreeSpendings(30)
 
         elif(option == 4):
             user_IO.View_getBalanceOfEachCategory()
