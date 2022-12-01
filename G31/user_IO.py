@@ -547,7 +547,10 @@ def View_getCurrentBalance(indent):
 
 
 # Part 3
-def Top_ThreeSpendings():
+def GoodSort(value):
+    return (sorted(value, key = lambda x: x[4], reverse = True))
+ 
+def Top_ThreeSpendings(days_numbers):
     """
     Printing the top three spendings in the last 30 days
 
@@ -556,57 +559,45 @@ def Top_ThreeSpendings():
     """
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
     expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
-    sorted_expense_entries = []
-    dateT = RetriveTargetdate()
+    date_delta = RetriveTargetdate(days_numbers)
+                                   
+    expense_entries_in_30_days = []
+ 
     # Filitering rows of last 30 days
     for row in expense_entries:
-        date0 = row[0].split("-")
-        date0 = datetime.date(int(date0[0]),int(date0[1]),int(date0[2]))
-        Edge = False
-        i = 0
-        if date0 > dateT :
-            if sorted_expense_entries != []:                        # Sorting for better presention.
-                while not Edge :
-                    if row[0] < sorted_expense_entries[i][0]:
-                        sorted_expense_entries.insert(i, row)
-                        Edge = True
-                    else:
-                        if i == (len(sorted_expense_entries) - 1):    
-                            sorted_expense_entries.append(row)
-                            Edge = True
-                        else:
-                            i = i + 1
-            else:
-                sorted_expense_entries.append(row)
-    # Selecting the top 3 spendings / and adding suplmentary value in case not enought expense to print
-    expense_value_list = [float(column[4]) for column in expense_entries]
-    sorted_expense_value_list = sorted(expense_value_list, reverse = True)
-    empty_row = ["XXXX-XX-XX",False,"---","---","---"]
-    while (len(sorted_expense_value_list)<3):
-            sorted_expense_value_list.append(empty_row[4])
-    top_three_spendings_list = [sorted_expense_value_list[0],sorted_expense_value_list[1],sorted_expense_value_list[2]]
+        current_date = row[0].split("-")
+        current_date = datetime.date(int(current_date[0]),int(current_date[1]),int(current_date[2]))
+ 
+        if current_date > date_delta :
+            expense_entries_in_30_days.append(row)
+ 
+    expense_entries_in_30_days = GoodSort(expense_entries_in_30_days)
+    # https://www.geeksforgeeks.org/python-sort-list-according-second-element-sublist/
+    edge_number = 0
     i = 0
-    while i < 3:
-        if top_three_spendings_list[i] == "---":
-            print(empty_row)
-        else: 
-            for row in sorted_expense_entries:
-                if top_three_spendings_list[i] == "---":
-                    print(empty_row)
-                elif (float(row[4]) == top_three_spendings_list[i]):
-                    print(row)  
-        i = i + 1
+    end_number = 0
+    while i != 3 :
+        repeat = True
+        while repeat :
+            if expense_entries_in_30_days[end_number+1][4] != expense_entries_in_30_days[end_number][4]:
+                repeat = False
+                end_number = end_number + 1
+                i = i + 1
+            else:
+                end_number = end_number + 1
 
+    entries_to_print =[]
+    for i in range(0, end_number):
+        entries_to_print.append(expense_entries_in_30_days[i])
 
-def RetriveTargetdate():                                            # Finding the date 30 days before
+    column_header = Update_getColumnHeader()
+    Update_printEntries(column_header , entries_to_print)
+
+def RetriveTargetdate(days_numbers):                                            # Finding the date 30 days before
     date0 = datetime.date.today()
-    days0 = datetime.timedelta(30)
-    Target_date = date0 - days0
+    days_numbers = datetime.timedelta(days_numbers)
+    Target_date = date0 - days_numbers
     return Target_date
-
-
-
-
 
 def View_getBalanceOfEachCategory():
     """
