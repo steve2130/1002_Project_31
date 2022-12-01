@@ -550,6 +550,12 @@ def View_getCurrentBalance(indent):
 
 # Part 3
 def Top_ThreeSpendings():
+    """
+    Printing the top three spendings in the last 30 days
+
+    input: -
+    output: -
+    """
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
     expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
     sorted_expense_entries = []
@@ -574,15 +580,23 @@ def Top_ThreeSpendings():
                             i = i + 1
             else:
                 sorted_expense_entries.append(row)
-    # Selecting the top 3 spendings
+    # Selecting the top 3 spendings / and adding suplmentary value in case not enought expense to print
     expense_value_list = [float(column[4]) for column in expense_entries]
     sorted_expense_value_list = sorted(expense_value_list, reverse = True)
+    empty_row = ["XXXX-XX-XX",False,"---","---","---"]
+    while (len(sorted_expense_value_list)<3):
+            sorted_expense_value_list.append(empty_row[4])
     top_three_spendings_list = [sorted_expense_value_list[0],sorted_expense_value_list[1],sorted_expense_value_list[2]]
     i = 0
     while i < 3:
-        for row in sorted_expense_entries:
-            if float(row[4]) == top_three_spendings_list[i]:
-                print(row)  
+        if top_three_spendings_list[i] == "---":
+            print(empty_row)
+        else: 
+            for row in sorted_expense_entries:
+                if top_three_spendings_list[i] == "---":
+                    print(empty_row)
+                elif (float(row[4]) == top_three_spendings_list[i]):
+                    print(row)  
         i = i + 1
 
 
