@@ -558,7 +558,6 @@ def Top_ThreeSpendings(days_numbers):
     output: -
     """
     entries = csv_IO.CSV_retrieveEntireListOfEntries()
-    print("2")
     expense_entries = [row for row in entries if row[1].upper() == "FALSE"]
     date_delta = RetriveTargetdate(days_numbers)
                                    
@@ -586,9 +585,13 @@ def Top_ThreeSpendings(days_numbers):
                 i = i + 1
             else:
                 end_number = end_number + 1
-                 
+
+    entries_to_print =[]
     for i in range(0, end_number):
-        print(expense_entries_in_30_days[i])
+        entries_to_print.append(expense_entries_in_30_days[i])
+
+    column_header = Update_getColumnHeader()
+    Update_printEntries(column_header , entries_to_print)
 
 def RetriveTargetdate(days_numbers):                                            # Finding the date 30 days before
     date0 = datetime.date.today()
