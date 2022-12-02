@@ -5,6 +5,7 @@
 import main
 import csv_IO as csv_IO
 import datetime
+import pandas as pd
 
 # Record()
 ########################################################################################################
@@ -542,7 +543,19 @@ def View_getCurrentBalance(indent):
         elif (balance < 0):
             IndentPrint(f"Current balance: \033[1;41m {balance} \033[0;0m\n")
 
+# Part 2
+def LastYear():
+    lastyear = datetime.datetime.today - datetime.timedelta(365)
+    return lastyear
 
+
+def yearly_income():
+    entries = csv_IO.CSV_retrieveEntireListOfEntries() 
+    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
+    income_value_list = [float(column[4]&row[df[pd.to_datetime(df,index).year == lastyear].tolist()]) for column in income_entries]  #finding value of income last year
+    
+    
+    print("Your total income of last year is $", sum(income_value_list))
 
 
 
