@@ -5,7 +5,6 @@
 import main
 import csv_IO as csv_IO
 import datetime
-import pandas as pd
 
 # Record()
 ########################################################################################################
@@ -553,9 +552,14 @@ def LastYear():
 #     entries = csv_IO.CSV_retrieveEntireListOfEntries() 
 #     income_entries = [row for row in entries if row[1].upper() == "TRUE"]
 #     income_value_list = [float(column[4]&row[df[pd.to_datetime(df,index).year == lastyear].tolist()]) for column in income_entries]  #finding value of income last year
-    
+def yearly_income():
+    entries = csv_IO.CSV_retrieveEntireListOfEntries() 
+    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
+    income_date_list = df[income_entries].map(lambda y: y.year == lastyear)
+    income_value_list = [float(column[4]&row[df[income_date_list]]) for column in income_entries]  #finding value of income last year
     
     print("Your total income of last year is $", sum(income_value_list))
+ 
 
 
 
