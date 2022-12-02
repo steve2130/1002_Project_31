@@ -692,10 +692,10 @@ def View_getBalanceOfEachCategory():
 def View_getSortedCategoryList():
 
     """
-    To print the sum of each category and the overall balance in format of financial statement
+    To provide a list of five lists
 
     Input: {entries} (list) -> A list from data.csv that removed the column headers and in reverse order
-    Output: -
+    Output: [a list of income entries in order of category, a sum of category that defined as income, a list of expenses entries in order of category, a sum of category that defined as expenses, a list containing name of category without duplicates]
 
     """
 
@@ -742,6 +742,12 @@ def View_getSortedCategoryList():
 
 
 def View_printCategoryRecords():
+    """
+    To print all entries that are related to the category user selected.
+
+    Input: a list of category, a list of income entries in order of category, a list of expense entries in order of category
+    Output: -
+    """
     list_1 =  View_getSortedCategoryList()
 
     income_sorted_by_category = list_1[0]
