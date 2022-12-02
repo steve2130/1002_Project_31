@@ -133,7 +133,7 @@ def Update():
     row_data = csv_IO.CSV_retrieveEntireListOfEntries()     # entire list with header and in original order
     entries = user_IO.Update_getEntries()                   # list without header and in reverse order
 
-    if (entries == False):
+    if (entries == False or entries == []):
         user_IO.EmojiPrint("\033[0;31m:(\033[0;0m", "No data in data.csv. Cannot update.")
 
     else:

@@ -549,10 +549,10 @@ def LastYear():
     return lastyear
 
 
-def yearly_income():
-    entries = csv_IO.CSV_retrieveEntireListOfEntries() 
-    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
-    income_value_list = [float(column[4]&row[df[pd.to_datetime(df,index).year == lastyear].tolist()]) for column in income_entries]  #finding value of income last year
+# def yearly_income():
+#     entries = csv_IO.CSV_retrieveEntireListOfEntries() 
+#     income_entries = [row for row in entries if row[1].upper() == "TRUE"]
+#     income_value_list = [float(column[4]&row[df[pd.to_datetime(df,index).year == lastyear].tolist()]) for column in income_entries]  #finding value of income last year
     
     
     print("Your total income of last year is $", sum(income_value_list))
@@ -562,7 +562,7 @@ def yearly_income():
 
 # Part 3
 def GoodSort(value):
-    return (sorted(value, key = lambda x: x[4], reverse = True))
+    return (sorted(value, key = lambda x: float(x[4]), reverse = True))
  
 def Top_ThreeSpendings(days_numbers):
     """
@@ -587,18 +587,23 @@ def Top_ThreeSpendings(days_numbers):
  
     expense_entries_in_30_days = GoodSort(expense_entries_in_30_days)
     # https://www.geeksforgeeks.org/python-sort-list-according-second-element-sublist/
-    edge_number = 0
-    i = 0
-    end_number = 0
-    while i != 3 :
-        repeat = True
-        while repeat :
-            if expense_entries_in_30_days[end_number+1][4] != expense_entries_in_30_days[end_number][4]:
-                repeat = False
-                end_number = end_number + 1
-                i = i + 1
-            else:
-                end_number = end_number + 1
+
+    # edge_number = 0
+    # i = 0
+    if (len(expense_entries_in_30_days) < 3):       
+        end_number = len(expense_entries_in_30_days)
+
+    else:
+        end_number = 3
+    # while i != 3 :                # doesn't work if len(expense_entries_in_30_days) < 3
+    #     repeat = True
+    #     while repeat :
+    #         if expense_entries_in_30_days[end_number + 1][4] != expense_entries_in_30_days[end_number][4]:
+    #             repeat = False
+    #             end_number = end_number + 1
+    #             i = i + 1
+    #         else:
+    #             end_number = end_number + 1
 
     entries_to_print =[]
     for i in range(0, end_number):
