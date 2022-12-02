@@ -545,17 +545,21 @@ def View_getCurrentBalance(indent):
 
  # Part 2
 def LastYear():
-    lastyear = datetime.datetime.today - datetime.timedelta(365)
+    lastyear = datetime.datetime.today() - datetime.timedelta(365)
     return lastyear
 
 
-# def yearly_income():
-#     entries = csv_IO.CSV_retrieveEntireListOfEntries() 
-#     income_entries = [row for row in entries if row[1].upper() == "TRUE"]
-#     income_value_list = [float(column[4]&row[df[pd.to_datetime(df,index).year == lastyear].tolist()]) for column in income_entries]  #finding value of income last year
+def yearly_income():
+
+    entries = csv_IO.CSV_retrieveEntireListOfEntries() 
+    income_entries = [row for row in entries if row[1].upper() == "TRUE"]
+    for column in income_entries:
+        date = column[0].split("-")
+
+    income_value_list = [float(column[4]) for column in income_entries if datetime.datetime(int(date[0]), int(date[1]), int(date[2])) > LastYear()]         # finding value of income last year
     
     
-    print("Your total income of last year is $", sum(income_value_list))
+    print("\t\tYour total income of last year is $", round(sum(income_value_list), 1))
 
 
 
