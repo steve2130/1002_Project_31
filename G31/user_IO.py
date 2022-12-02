@@ -557,9 +557,10 @@ def yearly_income():
         date = column[0].split("-")
 
     income_value_list = [float(column[4]) for column in income_entries if datetime.datetime(int(date[0]), int(date[1]), int(date[2])) > LastYear()]         # finding value of income last year
-    
-    
+
+
     print("\t\tYour total income of last year is $", round(sum(income_value_list), 1))
+ 
 
 
 
